@@ -1,28 +1,228 @@
 @import '../../../styles/shared-styles.scss';
 
-.page-number {
-    cursor: pointer;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    margin: 0 2px;
-    border-radius: 3px;
+// ── Page header ─────────────────────────────────────────────
+.page-header {
+  margin-bottom: 20px;
+
+  .page-title {
+    font-family: $font-serif;
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: $color-text;
+    margin-bottom: 2px;
+  }
+
+  .page-subtitle {
+    font-family: $font-sans;
+    font-size: 0.82rem;
+    color: $color-muted;
+    margin: 0;
+  }
 }
 
-.page-number.active {
-    background-color: $shopapp-color !important;
-    color: #fff;
-    border-color: $shopapp-color !important;
+// ── Status tabs ─────────────────────────────────────────────
+.status-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid $color-border;
+  margin-bottom: 16px;
 }
 
-.btn.btn-primary {
-    margin-left: 10px;
+.tab-btn {
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 18px;
+  font-family: $font-sans;
+  font-size: 0.85rem;
+  color: $color-muted;
+  cursor: pointer;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+
+  &:hover { color: $color-text; }
+
+  &.active {
+    color: $color-text;
+    font-weight: 500;
+    border-bottom-color: $color-text;
+  }
 }
-.container-fluid {
-    background-color: white;
-    padding-left: 0 !important; /* Remove left padding */
-    padding-right: 0 !important; /* Remove right padding */
-    height: 100vh;
+
+// ── Search row ──────────────────────────────────────────────
+.search-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
 }
-.button-primary {
-    white-space: nowrap;
+
+.search-inline {
+  position: relative;
+
+  i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: $color-muted;
+    font-size: 0.72rem;
+  }
+
+  input {
+    border: 1px solid $color-border;
+    background: $color-white;
+    border-radius: 4px;
+    padding: 7px 12px 7px 28px;
+    font-family: $font-sans;
+    font-size: 0.82rem;
+    color: $color-text;
+    outline: none;
+    width: 240px;
+
+    &::placeholder { color: $color-muted; }
+    &:focus { border-color: $color-muted; }
+  }
+}
+
+.btn-search {
+  padding: 7px 16px;
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 4px;
+  font-family: $font-sans;
+  font-size: 0.82rem;
+  color: $color-text;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover { background: $color-bg-alt; }
+}
+
+// ── Table ───────────────────────────────────────────────────
+.data-table {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 24px;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 10px 16px;
+    font-family: $font-sans;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-muted;
+    text-align: left;
+    border-bottom: 1px solid $color-border;
+  }
+
+  tbody td {
+    padding: 13px 16px;
+    font-family: $font-sans;
+    font-size: 0.875rem;
+    color: $color-text;
+    border-bottom: 1px solid $color-bg-alt;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #FAFAF8; }
+}
+
+.order-id {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.customer-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+  margin-bottom: 2px;
+}
+
+.customer-email {
+  font-size: 0.78rem;
+  color: $color-muted;
+}
+
+.cell-muted { color: $color-muted; }
+.cell-price { font-weight: 500; }
+
+// ── Status badges ───────────────────────────────────────────
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-family: $font-sans;
+  font-size: 0.72rem;
+  font-weight: 400;
+
+  &.status-paid {
+    background: #EBEBEB;
+    color: #444;
+  }
+
+  &.status-fulfilled {
+    background: #E5F0E5;
+    color: #2E6B2E;
+  }
+
+  &.status-pending {
+    background: #F5F0E2;
+    color: #7A6018;
+  }
+
+  &.status-refunded,
+  &.status-cancelled {
+    background: #FAE8E8;
+    color: #B84040;
+  }
+
+  &.status-default {
+    background: $color-bg-alt;
+    color: $color-muted;
+  }
+}
+
+// ── Row actions ─────────────────────────────────────────────
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: $color-muted;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: $color-bg-alt;
+    color: $color-text;
+  }
+
+  &--danger:hover {
+    background: #FBE8E8;
+    color: #C0392B;
+  }
+}
+
+// ── Pagination ──────────────────────────────────────────────
+.pagination-wrap {
+  display: flex;
+  justify-content: center;
 }

@@ -46,6 +46,11 @@ export class AdminComponent implements OnInit {
     this.userResponse = this.userService.getUserResponseFromLocalStorage();    
     this.router.navigate(['/']);
   }
+  getInitials(): string {
+    const name = this.userResponse?.fullname ?? '';
+    return name.split(' ').filter(Boolean).map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
+  }
+
   showAdminComponent(componentName: string): void {
     debugger
     if (componentName === 'orders') {

@@ -1,50 +1,74 @@
-<div class="container-fluid">
-    <header class="header bg-success text-white d-flex justify-content-between">
-      <h1 class="header-title">Dashboard Header</h1>
-      <!-- Logout Button -->
-      <button class="btn btn-danger btn-sm" (click)="logout()">Logout</button>
-    </header>
-    <div class="row">
-      <nav id="sidebar" class="col-md-2 col-lg-2 d-md-block bg-light sidebar">
-        <div class="position-sticky">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link" 
-                (click)="showAdminComponent('orders')"
-                routerLink="/admin/orders"
-                routerLinkActive="active">
-                <i class="fab fa-first-order icon"></i>Orders
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" 
-                (click)="showAdminComponent('categories')"
-                  routerLink="/admin/categories"
-                  routerLinkActive="active">
-                <i class="fab fa-canadian-maple-leaf icon"></i>Categories
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" 
-                (click)="showAdminComponent('products')"
-                routerLink="/admin/products"
-                routerLinkActive="active">
-                <i class="fab fa-codepen icon"></i>Products
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" 
-                (click)="showAdminComponent('users')"
-                routerLink="/admin/users"
-                routerLinkActive="active">
-                <i class="fab fa-codepen icon"></i>Users
-              </a>
-            </li>
-          </ul>
-        </div>
-      </nav>
-      <div class="col-md-10 col-lg-10 overflow-auto">
-        <router-outlet></router-outlet>
-      </div>
+<div class="admin-shell">
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-brand">
+      <span class="brand-name">Maison Sand</span>
+      <span class="admin-badge">ADMIN</span>
     </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-link"
+         routerLink="/admin/orders"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: false}">
+        <i class="fa-solid fa-cart-shopping"></i>
+        Orders
+      </a>
+      <a class="nav-link"
+         routerLink="/admin/products"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: false}">
+        <i class="fa-solid fa-tag"></i>
+        Products
+      </a>
+      <a class="nav-link"
+         routerLink="/admin/users"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: false}">
+        <i class="fa-solid fa-user"></i>
+        Customers
+      </a>
+      <a class="nav-link"
+         routerLink="/admin/categories"
+         routerLinkActive="active"
+         [routerLinkActiveOptions]="{exact: false}">
+        <i class="fa-solid fa-gear"></i>
+        Settings
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a class="signout-link" (click)="logout()">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        Sign out
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main area -->
+  <div class="admin-main">
+    <header class="admin-topbar">
+      <div class="search-wrap">
+        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+        <input class="search-input" type="text" placeholder="Search orders, products, customers...">
+      </div>
+      <div class="topbar-right">
+        <button class="notif-btn">
+          <i class="fa-solid fa-bell"></i>
+          <span class="notif-dot"></span>
+        </button>
+        <div class="user-chip">
+          <div class="user-avatar">{{ getInitials() }}</div>
+          <div class="user-meta">
+            <span class="user-name">{{ userResponse?.fullname }}</span>
+            <span class="user-role">{{ userResponse?.role?.name }}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="admin-content">
+      <router-outlet></router-outlet>
+    </main>
   </div>
+</div>

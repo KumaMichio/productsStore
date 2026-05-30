@@ -1,5 +1,5 @@
 import { Component, OnInit, inject, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../services/user.service';
 import { Router } from '@angular/router';
@@ -15,9 +15,10 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
   templateUrl: './user.admin.component.html',
   styleUrl: './user.admin.component.scss',
   standalone: true,
-  imports: [   
+  imports: [
     CommonModule,
     FormsModule,
+    TitleCasePipe,
   ]
 })
 export class UserAdminComponent implements OnInit{
@@ -121,6 +122,10 @@ export class UserAdminComponent implements OnInit{
       });
     }
   
+    getInitials(name: string): string {
+      return (name ?? '').split(' ').filter(Boolean).map(w => w[0]).join('').toUpperCase().slice(0, 2) || '?';
+    }
+
     toggleUserStatus(user: UserResponse) {
       let confirmation: boolean;
       if (user.is_active) {

@@ -87,6 +87,9 @@ public class ProductService implements IProductService{
         if(existingProduct != null) {
             //copy các thuộc tính từ DTO -> Product
             //Có thể sử dụng ModelMapper
+            if (productDTO.getCategoryId() == null) {
+                throw new DataNotFoundException("category_id is required");
+            }
             Category existingCategory = categoryRepository
                     .findById(productDTO.getCategoryId())
                     .orElseThrow(() ->
@@ -97,7 +100,7 @@ public class ProductService implements IProductService{
             }
 
             existingProduct.setCategory(existingCategory);
-            if(productDTO.getPrice() >= 0) {
+            if(productDTO.getPrice() != null && productDTO.getPrice() >= 0) {
                 existingProduct.setPrice(productDTO.getPrice());
             }
             if(productDTO.getDescription() != null &&
@@ -106,7 +109,7 @@ public class ProductService implements IProductService{
             }
             if(productDTO.getThumbnail() != null &&
                     !productDTO.getThumbnail().isEmpty()) {
-                existingProduct.setDescription(productDTO.getThumbnail());
+                existingProduct.setThumbnail(productDTO.getThumbnail());
             }
             return productRepository.save(existingProduct);
         }

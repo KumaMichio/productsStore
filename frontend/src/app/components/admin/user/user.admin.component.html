@@ -1,37 +1,55 @@
-<h1>sss</h1>
-<table class="table table-striped">
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Customers</h1>
+    <p class="page-subtitle">{{ users.length }} registered users</p>
+  </div>
+</div>
+
+<div class="data-table">
+  <table>
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Full Name</th>
+        <th>Customer</th>
         <th>Phone</th>
         <th>Address</th>
-        <th>State</th>
         <th>Role</th>
-        <th>Action</th>
+        <th>Status</th>
+        <th></th>
       </tr>
     </thead>
     <tbody>
-        @for(user of users; track user.id) {
+      @for(user of users; track user.id) {
         <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.fullname }}</td>
-            <td>{{ user.phone_number }}</td>
-            <td>{{ user.address }}</td>
-            <td>{{ user.is_active ? 'Active' : 'Inactive' }}</td>
-            <td>{{ user.role.name }}</td>
-            <td>
-                <button class="btn" [ngClass]="{
-                        'btn-danger': user.is_active,
-                        'btn-success': !user.is_active
-                      }" (click)="toggleUserStatus(user)">
-                    {{ user.is_active ? 'Block User' : 'Unblock User' }}
-                </button>
-                <button class="btn btn-primary ms-2" (click)="resetPassword(user.id)">
-                    Reset Password
-                </button>
-            </td>
+          <td>
+            <div class="customer-cell">
+              <div class="user-avatar">{{ getInitials(user.fullname) }}</div>
+              <div class="customer-name">{{ user.fullname }}</div>
+            </div>
+          </td>
+          <td class="cell-muted">{{ user.phone_number }}</td>
+          <td class="cell-muted">{{ user.address || '—' }}</td>
+          <td class="cell-muted">{{ user.role?.name | titlecase }}</td>
+          <td>
+            <span class="status-badge" [ngClass]="user.is_active ? 'status-active' : 'status-blocked'">
+              {{ user.is_active ? 'Active' : 'Blocked' }}
+            </span>
+          </td>
+          <td>
+            <div class="row-actions">
+              <button class="action-btn"
+                      [class.action-btn--warn]="user.is_active"
+                      [class.action-btn--success]="!user.is_active"
+                      [title]="user.is_active ? 'Block user' : 'Unblock user'"
+                      (click)="toggleUserStatus(user)">
+                <i class="fa-solid" [ngClass]="user.is_active ? 'fa-ban' : 'fa-circle-check'"></i>
+              </button>
+              <button class="action-btn" title="Reset password" (click)="resetPassword(user.id)">
+                <i class="fa-solid fa-key"></i>
+              </button>
+            </div>
+          </td>
         </tr>
-        }
+      }
     </tbody>
   </table>
+</div>

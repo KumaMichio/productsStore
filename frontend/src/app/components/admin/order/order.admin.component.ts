@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 import { Location } from '@angular/common';
 import { OrderResponse } from '../../../responses/order/order.response';
 import { OrderService } from '../../../services/order.service';
-import { CommonModule,DOCUMENT } from '@angular/common';
+import { CommonModule, DOCUMENT, TitleCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiResponse } from '../../../responses/api.response';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
@@ -17,9 +17,10 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
   templateUrl: './order.admin.component.html',
   styleUrls: ['./order.admin.component.scss'],
   standalone: true,
-  imports: [   
+  imports: [
     CommonModule,
     FormsModule,
+    TitleCasePipe,
   ]
 })
 export class OrderAdminComponent implements OnInit{  
@@ -31,6 +32,27 @@ export class OrderAdminComponent implements OnInit{
   keyword:string = "";
   visiblePages: number[] = [];
   localStorage?:Storage;
+  activeTab: string = 'all';
+
+  get filteredOrders(): OrderResponse[] {
+    if (this.activeTab === 'all') return this.orders;
+    return this.orders.filter(o => o.status?.toLowerCase() === this.activeTab);
+  }
+
+  setTab(tab: string): void {
+    this.activeTab = tab;
+  }
+
+  getStatusClass(status: string): string {
+    switch ((status ?? '').toLowerCase()) {
+      case 'paid':      return 'status-paid';
+      case 'fulfilled': return 'status-fulfilled';
+      case 'pending':   return 'status-pending';
+      case 'refunded':  return 'status-refunded';
+      case 'cancelled': return 'status-cancelled';
+      default:          return 'status-default';
+    }
+  }
 
   constructor(
     private orderService: OrderService,
@@ -79,18 +101,20 @@ export class OrderAdminComponent implements OnInit{
   }
 
   generateVisiblePageArray(currentPage: number, totalPages: number): number[] {
+    const safeTotal = Math.max(totalPages || 0, 0);
+    if (safeTotal === 0) return [];
     const maxVisiblePages = 5;
     const halfVisiblePages = Math.floor(maxVisiblePages / 2);
 
     let startPage = Math.max(currentPage - halfVisiblePages, 1);
-    let endPage = Math.min(startPage + maxVisiblePages - 1, totalPages);
+    let endPage = Math.min(startPage + maxVisiblePages - 1, safeTotal);
 
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(endPage - maxVisiblePages + 1, 1);
     }
 
-    return new Array(endPage - startPage + 1).fill(0)
-        .map((_, index) => startPage + index);
+    const length = Math.max(endPage - startPage + 1, 0);
+    return new Array(length).fill(0).map((_, index) => startPage + index);
   }
 
   deleteOrder(id:number) {

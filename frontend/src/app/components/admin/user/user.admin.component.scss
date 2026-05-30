@@ -1,0 +1,139 @@
+@import '../../../styles/shared-styles.scss';
+
+.page-header {
+  margin-bottom: 24px;
+
+  .page-title {
+    font-family: $font-serif;
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: $color-text;
+    margin-bottom: 2px;
+  }
+
+  .page-subtitle {
+    font-family: $font-sans;
+    font-size: 0.82rem;
+    color: $color-muted;
+    margin: 0;
+  }
+}
+
+// ── Table ───────────────────────────────────────────────────
+.data-table {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 6px;
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 10px 16px;
+    font-family: $font-sans;
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: $color-muted;
+    text-align: left;
+    border-bottom: 1px solid $color-border;
+  }
+
+  tbody td {
+    padding: 13px 16px;
+    font-family: $font-sans;
+    font-size: 0.875rem;
+    color: $color-text;
+    border-bottom: 1px solid $color-bg-alt;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: #FAFAF8; }
+}
+
+.customer-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: $color-accent;
+  color: $color-white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-sans;
+  font-size: 0.68rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.customer-name {
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.cell-muted { color: $color-muted; font-size: 0.875rem; }
+
+// ── Status badges ───────────────────────────────────────────
+.status-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-family: $font-sans;
+  font-size: 0.72rem;
+
+  &.status-active {
+    background: #E5F0E5;
+    color: #2E6B2E;
+  }
+
+  &.status-blocked {
+    background: #FAE8E8;
+    color: #B84040;
+  }
+}
+
+// ── Row actions ─────────────────────────────────────────────
+.row-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: flex-end;
+}
+
+.action-btn {
+  background: none;
+  border: none;
+  color: $color-muted;
+  cursor: pointer;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: $color-bg-alt;
+    color: $color-text;
+  }
+
+  &--warn:hover {
+    background: #FBE8E8;
+    color: #C0392B;
+  }
+
+  &--success:hover {
+    background: #E5F0E5;
+    color: #2E6B2E;
+  }
+}
