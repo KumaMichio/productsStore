@@ -1,0 +1,94 @@
+@import 'app/styles/shared-styles.scss';
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  background-color: $color-bg;
+  color: $color-text;
+  font-family: $font-sans;
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: $font-serif;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+img { display: block; max-width: 100%; }
+
+// Global button
+.btn-primary {
+  background-color: $color-accent;
+  border-color: $color-accent;
+  color: $color-white;
+  font-family: $font-sans;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.75rem 2rem;
+  border-radius: 0;
+  transition: background 0.2s;
+
+  &:hover, &:focus {
+    background-color: $color-accent-hover;
+    border-color: $color-accent-hover;
+    color: $color-white;
+  }
+}
+
+.btn-outline-dark {
+  border-color: $color-text;
+  color: $color-text;
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 0;
+
+  &:hover {
+    background-color: $color-text;
+    color: $color-white;
+  }
+}
+
+// Form controls
+.form-control {
+  border: 1px solid $color-border;
+  border-radius: 0;
+  background-color: transparent;
+  color: $color-text;
+  font-family: $font-sans;
+  font-size: 0.9rem;
+  padding: 0.7rem 1rem;
+
+  &:focus {
+    border-color: $color-text;
+    box-shadow: none;
+    background-color: transparent;
+    color: $color-text;
+  }
+
+  &::placeholder { color: $color-muted; }
+}
+
+// Pagination
+.pagination .page-link {
+  border-radius: 0;
+  border-color: $color-border;
+  color: $color-text;
+  font-size: 0.85rem;
+}
+.pagination .page-item.active .page-link {
+  background-color: $color-accent;
+  border-color: $color-accent;
+}

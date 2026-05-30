@@ -1,0 +1,18 @@
+// Design system — Maison Sand style
+$color-bg:        #F8F5F0;
+$color-bg-alt:    #F0EBE3;
+$color-text:      #1C1A16;
+$color-muted:     #7A6E64;
+$color-border:    #E2D9CE;
+$color-accent:    #3D2E20;
+$color-accent-hover: #5C4535;
+$color-white:     #FFFFFF;
+
+$font-serif: 'Cormorant Garamond', Georgia, serif;
+$font-sans:  'DM Sans', system-ui, sans-serif;
+
+// Legacy aliases (giữ để không break component cũ)
+$shopapp-color:            $color-accent;
+$shopapp-tint-color:       $color-muted;
+$shopapp-title-color:      $color-text;
+$shopapp-background-color: $color-bg;

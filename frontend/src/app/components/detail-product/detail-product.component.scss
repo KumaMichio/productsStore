@@ -1,0 +1,223 @@
+@import '../../styles/shared-styles.scss';
+
+.detail-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 4rem;
+}
+
+.breadcrumb-bar {
+  padding: 1.5rem 0;
+  border-bottom: 1px solid $color-border;
+  margin-bottom: 3rem;
+}
+
+.back-link {
+  font-size: 0.82rem;
+  color: $color-muted;
+  letter-spacing: 0.04em;
+  transition: color 0.15s;
+  &:hover { color: $color-text; }
+}
+
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+// Images
+.main-image-wrap {
+  background-color: $color-bg-alt;
+  aspect-ratio: 1;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnails {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  background-color: $color-bg-alt;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: border-color 0.15s;
+
+  &.active { border-color: $color-text; }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// Info
+.info-col { padding-top: 0.5rem; }
+
+.product-category-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  color: $color-muted;
+  margin-bottom: 0.75rem;
+}
+
+.product-name {
+  font-family: $font-serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: $color-text;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.product-price {
+  font-size: 1.1rem;
+  color: $color-text;
+  margin-bottom: 1.5rem;
+}
+
+.product-desc {
+  font-size: 0.9rem;
+  color: $color-muted;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+// Quantity
+.qty-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.qty-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: $color-muted;
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid $color-border;
+}
+
+.qty-btn {
+  background: none;
+  border: none;
+  width: 36px;
+  height: 36px;
+  font-size: 1.1rem;
+  color: $color-text;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover { background-color: $color-bg-alt; }
+}
+
+.qty-value {
+  width: 40px;
+  text-align: center;
+  font-size: 0.9rem;
+  border-left: 1px solid $color-border;
+  border-right: 1px solid $color-border;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.total-price {
+  font-size: 0.9rem;
+  color: $color-muted;
+  margin-bottom: 2rem;
+
+  strong { color: $color-text; font-weight: 500; }
+}
+
+// Action buttons
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+}
+
+.btn-add-cart {
+  width: 100%;
+  background-color: $color-accent;
+  color: $color-white;
+  border: none;
+  padding: 0.9rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background-color: $color-accent-hover; }
+}
+
+.btn-buy-now {
+  width: 100%;
+  background-color: transparent;
+  color: $color-text;
+  border: 1px solid $color-text;
+  padding: 0.9rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background-color: $color-text;
+    color: $color-white;
+  }
+}
+
+// Trust badges
+.trust-badges {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid $color-border;
+}
+
+.badge-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.badge-title {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: $color-text;
+}
+
+.badge-sub {
+  font-size: 0.72rem;
+  color: $color-muted;
+}

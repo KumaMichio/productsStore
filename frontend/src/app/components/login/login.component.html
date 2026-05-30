@@ -1,0 +1,69 @@
+<div class="login-page">
+  <!-- Left: decorative panel -->
+  <div class="login-panel">
+    <div class="panel-content">
+      <p class="panel-label">THÀNH VIÊN</p>
+      <h2 class="panel-title">Truy cập sớm các bộ sưu tập giới hạn.</h2>
+    </div>
+  </div>
+
+  <!-- Right: form -->
+  <div class="login-form-side">
+    <div class="form-container">
+      <p class="form-eyebrow">CHÀO MỪNG TRỞ LẠI</p>
+      <h1 class="form-title">Đăng nhập vào tài khoản.</h1>
+
+      <div class="field-group">
+        <label class="field-label" for="phoneNumber">SỐ ĐIỆN THOẠI</label>
+        <input type="text" id="phoneNumber" class="form-control"
+          placeholder="Nhập số điện thoại"
+          [(ngModel)]="phoneNumber"
+          (input)="onPhoneNumberChange()">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="password">MẬT KHẨU</label>
+        <div class="password-wrap">
+          <input [type]="showPassword ? 'text' : 'password'"
+            id="password" class="form-control"
+            placeholder="Ít nhất 3 ký tự"
+            [(ngModel)]="password">
+          <button class="pw-toggle" type="button" (click)="togglePassword()">
+            <i class="fas" [ngClass]="showPassword ? 'fa-eye' : 'fa-eye-slash'"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="checkbox-label">
+          <input type="checkbox" [(ngModel)]="rememberMe">
+          <span>Ghi nhớ đăng nhập</span>
+        </label>
+        <a class="forgot-link" href="#">Quên mật khẩu?</a>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">QUYỀN ĐĂNG NHẬP</label>
+        <select class="form-control" [(ngModel)]="selectedRole">
+          <option selected disabled>Chọn quyền</option>
+          @for(role of roles; track role.name) {
+            <option [ngValue]="role">{{ role.name }}</option>
+          }
+        </select>
+      </div>
+
+      <button class="login-btn" type="button" (click)="login()">Đăng nhập</button>
+
+      <div class="divider-line">
+        <span>HOẶC</span>
+      </div>
+
+      <p class="register-text">
+        Chưa có tài khoản?
+        <a class="register-link" (click)="createAccount()">Tạo tài khoản</a>
+      </p>
+
+      <a routerLink="/" class="back-link">← Tiếp tục mua sắm</a>
+    </div>
+  </div>
+</div>

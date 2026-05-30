@@ -1,0 +1,87 @@
+<app-header></app-header>
+
+<div class="detail-page">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb-bar">
+    <a routerLink="/" class="back-link">← Quay lại</a>
+  </div>
+
+  <div class="detail-layout">
+    <!-- Left: Images -->
+    <div class="images-col">
+      <!-- Main image -->
+      <div class="main-image-wrap">
+        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            @for(image of product?.product_images; track image.image_url; let i = $index) {
+              <div class="carousel-item" [ngClass]="{'active': i === currentImageIndex}">
+                <img [src]="image.image_url" class="main-img" alt="Product Image">
+              </div>
+            }
+          </div>
+          <button class="carousel-control-prev" type="button"
+            data-bs-target="#carouselExample" data-bs-slide="prev" (click)="previousImage()">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          </button>
+          <button class="carousel-control-next" type="button"
+            data-bs-target="#carouselExample" data-bs-slide="next" (click)="nextImage()">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Thumbnails -->
+      <div class="thumbnails">
+        @for(image of product?.product_images; track image.image_url; let i = $index) {
+          <div class="thumb" [class.active]="i === currentImageIndex" (click)="thumbnailClick(i)">
+            <img [src]="image.image_url" alt="Thumbnail">
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Right: Info -->
+    <div class="info-col">
+<h1 class="product-name">{{ product?.name }}</h1>
+      <p class="product-price">${{ product?.price }}</p>
+
+      <p class="product-desc">{{ product?.description }}</p>
+
+      <!-- Quantity -->
+      <div class="qty-row">
+        <span class="qty-label">SỐ LƯỢNG</span>
+        <div class="qty-control">
+          <button class="qty-btn" (click)="decreaseQuantity()">−</button>
+          <span class="qty-value">{{ quantity }}</span>
+          <button class="qty-btn" (click)="increaseQuantity()">+</button>
+        </div>
+      </div>
+
+      <p class="total-price">Tổng: <strong>${{ getTotalPrice() | number:'1.2-2' }}</strong></p>
+
+      <!-- Actions -->
+      <div class="action-buttons">
+        <button class="btn-add-cart" (click)="addToCart()">Thêm vào giỏ hàng</button>
+        <button class="btn-buy-now" (click)="buyNow()">Mua ngay</button>
+      </div>
+
+      <!-- Trust badges -->
+      <div class="trust-badges">
+        <div class="badge-item">
+          <span class="badge-title">Miễn phí vận chuyển</span>
+          <span class="badge-sub">Đơn từ $120</span>
+        </div>
+        <div class="badge-item">
+          <span class="badge-title">Đổi trả 30 ngày</span>
+          <span class="badge-sub">Không cần lý do</span>
+        </div>
+        <div class="badge-item">
+          <span class="badge-title">Bảo hành 2 năm</span>
+          <span class="badge-sub">Chất lượng bền lâu</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>

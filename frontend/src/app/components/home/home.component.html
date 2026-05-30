@@ -1,0 +1,77 @@
+<app-header></app-header>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-text">
+    <h1 class="hero-title">Sản phẩm tốt,<br><em>dùng mãi bền lâu.</em></h1>
+    <p class="hero-sub">Bộ sưu tập hàng ngày — nguồn gốc rõ ràng, chất lượng đảm bảo.</p>
+  </div>
+</section>
+
+<!-- Search & Filter -->
+<div class="search-bar">
+  <div class="search-inner">
+    <input type="text" class="form-control search-input"
+      placeholder="Tìm sản phẩm..."
+      [(ngModel)]="keyword">
+    <select class="form-control category-select" [(ngModel)]="selectedCategoryId">
+      <option [value]="0">Tất cả danh mục</option>
+      @for(category of categories; track category.name) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+    <button class="btn btn-primary search-btn" (click)="searchProducts()">Tìm kiếm</button>
+  </div>
+</div>
+
+<!-- Product Grid -->
+<section class="product-section">
+  <div class="product-grid">
+    @for(product of products; track product.id) {
+      <div class="product-card" (click)="onProductClick(product.id)">
+        <div class="product-img-wrap">
+          <img [src]="product.url" [alt]="product.name" class="product-img">
+        </div>
+        <div class="product-info">
+    <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-price">${{ product.price }}</p>
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-wrap">
+    <nav>
+      <ul class="pagination">
+        @if(currentPage > 0) {
+          <li class="page-item">
+            <a class="page-link" (click)="onPageChange(0)">First</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" (click)="onPageChange(currentPage - 1)">
+              <i class="fa fa-chevron-left"></i>
+            </a>
+          </li>
+        }
+        @for(page of visiblePages; track page) {
+          <li class="page-item" [ngClass]="{'active': page === currentPage + 1}">
+            <a class="page-link" (click)="onPageChange(page - 1)">{{ page }}</a>
+          </li>
+        }
+        @if(currentPage < totalPages - 1) {
+          <li class="page-item">
+            <a class="page-link" (click)="onPageChange(currentPage + 1)">
+              <i class="fa fa-chevron-right"></i>
+            </a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" (click)="onPageChange(totalPages - 1)">Last</a>
+          </li>
+        }
+      </ul>
+    </nav>
+  </div>
+</section>
+
+<app-footer></app-footer>

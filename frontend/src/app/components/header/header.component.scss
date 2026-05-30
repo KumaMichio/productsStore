@@ -1,0 +1,93 @@
+@import '../../styles/shared-styles.scss';
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: $color-bg;
+  border-bottom: 1px solid $color-border;
+}
+
+.header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 56px;
+}
+
+.brand {
+  font-family: $font-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: $color-text;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.nav-left {
+  display: flex;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.nav-link-item {
+  font-size: 0.8rem;
+  letter-spacing: 0.06em;
+  color: $color-text;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+  white-space: nowrap;
+
+  &:hover, &.active { opacity: 1; }
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 0.25rem;
+  cursor: pointer;
+  color: $color-text;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  opacity: 0.75;
+  transition: opacity 0.15s;
+
+  &:hover, &.active { opacity: 1; }
+}
+
+.user-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.user-menu-wrapper { position: relative; }
+
+.popover-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 0.5rem 0;
+  min-width: 140px;
+}
+
+.popover-item {
+  display: block;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  color: $color-text;
+  cursor: pointer;
+
+  &:hover { background-color: $color-bg-alt; }
+}

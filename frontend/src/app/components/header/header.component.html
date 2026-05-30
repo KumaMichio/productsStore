@@ -1,0 +1,55 @@
+<header class="site-header">
+  <div class="header-inner">
+    <!-- Left nav -->
+    <nav class="nav-left">
+      <a routerLink="/" class="nav-link-item" [class.active]="activeNavItem === 0" (click)="setActiveNavItem(0)">Shop</a>
+      <a routerLink="/" class="nav-link-item" [class.active]="activeNavItem === 1" (click)="setActiveNavItem(1)">Journal</a>
+      <a routerLink="/" class="nav-link-item" [class.active]="activeNavItem === 2" (click)="setActiveNavItem(2)">About</a>
+    </nav>
+
+    <!-- Center brand -->
+    <a routerLink="/" class="brand">ShopApp</a>
+
+    <!-- Right icons -->
+    <div class="nav-right">
+      <button class="icon-btn" aria-label="Search">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+
+      @if (userResponse) {
+        <div class="user-menu-wrapper">
+          <button class="icon-btn user-name-btn"
+            [ngbPopover]="popoverContent"
+            (click)="togglePopover($event)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+            <span class="user-label">{{ userResponse.fullname }}</span>
+          </button>
+          <ng-template #popoverContent>
+            <div class="popover-list">
+              <a class="popover-item" (click)="handleItemClick(0)">Tài khoản của tôi</a>
+              <a class="popover-item" (click)="handleItemClick(1)">Đơn mua</a>
+              <a class="popover-item" (click)="handleItemClick(2)">Đăng xuất</a>
+            </div>
+          </ng-template>
+        </div>
+      } @else {
+        <a routerLink="/login" class="icon-btn" aria-label="Account">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+          </svg>
+        </a>
+      }
+
+      <a routerLink="/orders" class="icon-btn" aria-label="Cart" [class.active]="activeNavItem === 3" (click)="setActiveNavItem(3)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
+          <path d="M16 10a4 4 0 0 1-8 0"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</header>

@@ -30,11 +30,12 @@
 
 ## Cấu trúc chính
 
-- `store-backend/shopapp-backend`: mã nguồn Spring Boot backend.
-- `store-angular-front/shopapp-angular`: mã nguồn Angular frontend.
+- `backend/`: mã nguồn Spring Boot backend.
+- `frontend/`: mã nguồn Angular frontend.
 - `deployment.yaml`: docker-compose cho MySQL, phpMyAdmin, Redis, Spring Boot.
 - `kafka-deployment.yaml`: docker-compose cho Zookeeper + Kafka brokers.
 - `DockerfileJavaSpring`: build image Spring Boot multi-stage.
+- `docs/`: project documentation for architecture, setup, backend, frontend, and Docker/Kafka deployment.
 
 ---
 
@@ -58,7 +59,7 @@
 3. Chạy backend:
 
 ```bash
-cd store-backend/shopapp-backend
+cd backend
 mvn spring-boot:run
 ```
 
@@ -75,7 +76,7 @@ Mặc định service sẽ chạy ở port **8088** (theo `DockerfileJavaSpring`
 **Cài đặt & chạy dev server:**
 
 ```bash
-cd store-angular-front/shopapp-angular
+cd frontend
 npm install
 npm run start:dev   # hoặc: npm start / ng serve
 ```
@@ -140,7 +141,7 @@ Bạn có 2 lựa chọn:
 - **Dev (khuyên dùng khi development)**:
 
 ```bash
-cd store-angular-front/shopapp-angular
+cd frontend
 npm install
 npm run start:dev
 ```
@@ -158,14 +159,14 @@ Sau đó cấu hình API base URL trong Angular (environment) về:
 - **Chạy Backend local (không Docker)**:
 
 ```bash
-cd store-backend/shopapp-backend
+cd backend
 mvn spring-boot:run
 ```
 
 - **Chạy Frontend Angular dev**:
 
 ```bash
-cd store-angular-front/shopapp-angular
+cd frontend
 npm install
 npm run start:dev
 ```
