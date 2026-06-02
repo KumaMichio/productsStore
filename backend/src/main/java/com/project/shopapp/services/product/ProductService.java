@@ -1,5 +1,7 @@
 package com.project.shopapp.services.product;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.project.shopapp.dtos.ProductDTO;
 import com.project.shopapp.dtos.ProductImageDTO;
 import com.project.shopapp.exceptions.DataNotFoundException;
@@ -8,6 +10,7 @@ import com.project.shopapp.models.*;
 import com.project.shopapp.repositories.*;
 import com.project.shopapp.responses.product.ProductResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -22,6 +25,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -35,7 +39,11 @@ public class ProductService implements IProductService{
     private final CategoryRepository categoryRepository;
     private final ProductImageRepository productImageRepository;
     private final FavoriteRepository favoriteRepository;
-    private static String UPLOADS_FOLDER = "uploads";
+    private final Cloudinary cloudinary;
+    private static final String UPLOADS_FOLDER = "uploads";
+
+    @Value("${CLOUDINARY_URL:}")
+    private String cloudinaryUrl;
     @Override
     @Transactional
     public Product createProduct(ProductDTO productDTO) throws DataNotFoundException {
@@ -155,43 +163,72 @@ public class ProductService implements IProductService{
         return productImageRepository.save(newProductImage);
     }
     @Override
-    public void deleteFile(String filename) throws IOException {
-        // Đường dẫn đến thư mục chứa file
-        java.nio.file.Path uploadDir = Paths.get(UPLOADS_FOLDER);
-        // Đường dẫn đầy đủ đến file cần xóa
-        java.nio.file.Path filePath = uploadDir.resolve(filename);
+    @SuppressWarnings("unchecked")
+    public void deleteFile(String imageIdentifier) throws IOException {
+        if (imageIdentifier == null || imageIdentifier.isBlank()) return;
 
-        // Kiểm tra xem file tồn tại hay không
+        if (imageIdentifier.startsWith("http")) {
+            // Cloudinary URL — extract public_id and delete
+            if (cloudinaryUrl != null && !cloudinaryUrl.isBlank()) {
+                try {
+                    String publicId = extractCloudinaryPublicId(imageIdentifier);
+                    cloudinary.uploader().destroy(publicId, ObjectUtils.emptyMap());
+                } catch (Exception e) {
+                    throw new IOException("Cloudinary delete failed: " + e.getMessage(), e);
+                }
+            }
+            return;
+        }
+        // Local filename fallback
+        java.nio.file.Path filePath = Paths.get(UPLOADS_FOLDER).resolve(imageIdentifier);
         if (Files.exists(filePath)) {
-            // Xóa file
             Files.delete(filePath);
         } else {
-            throw new FileNotFoundException("File not found: " + filename);
+            throw new FileNotFoundException("File not found: " + imageIdentifier);
         }
+    }
+
+    private String extractCloudinaryPublicId(String secureUrl) {
+        // https://res.cloudinary.com/{cloud}/image/upload/v{ver}/{folder}/{name}.{ext}
+        int uploadIdx = secureUrl.indexOf("/upload/");
+        if (uploadIdx < 0) return secureUrl;
+        String path = secureUrl.substring(uploadIdx + 8);
+        if (path.matches("v\\d+/.*")) path = path.substring(path.indexOf('/') + 1);
+        int dotIdx = path.lastIndexOf('.');
+        return dotIdx > 0 ? path.substring(0, dotIdx) : path;
     }
     private boolean isImageFile(MultipartFile file) {
         String contentType = file.getContentType();
         return contentType != null && contentType.startsWith("image/");
     }
     @Override
+    @SuppressWarnings("unchecked")
     public String storeFile(MultipartFile file) throws IOException {
         if (!isImageFile(file) || file.getOriginalFilename() == null) {
             throw new IOException("Invalid image format");
         }
-        String filename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
-        // Thêm UUID vào trước tên file để đảm bảo tên file là duy nhất
-        //String uniqueFilename = UUID.randomUUID().toString() + "_" + filename; //old code, not good
-        String uniqueFilename = UUID.randomUUID().toString() + "_" + System.nanoTime(); // Convert nanoseconds to microseconds
-        // Đường dẫn đến thư mục mà bạn muốn lưu file
-        java.nio.file.Path uploadDir = Paths.get(UPLOADS_FOLDER);
-        // Kiểm tra và tạo thư mục nếu nó không tồn tại
-        if (!Files.exists(uploadDir)) {
-            Files.createDirectories(uploadDir);
+        // Use Cloudinary when configured, fall back to local disk
+        if (cloudinaryUrl != null && !cloudinaryUrl.isBlank()) {
+            try {
+                Map<String, Object> params = ObjectUtils.asMap(
+                        "folder", "shopapp/products",
+                        "resource_type", "image",
+                        "overwrite", false
+                );
+                Map<String, Object> result = cloudinary.uploader().upload(file.getBytes(), params);
+                return (String) result.get("secure_url");
+            } catch (Exception e) {
+                throw new IOException("Cloudinary upload failed: " + e.getMessage(), e);
+            }
         }
-        // Đường dẫn đầy đủ đến file
-        java.nio.file.Path destination = Paths.get(uploadDir.toString(), uniqueFilename);
-        // Sao chép file vào thư mục đích
-        Files.copy(file.getInputStream(), destination, StandardCopyOption.REPLACE_EXISTING);
+        // Local disk fallback (development)
+        String originalFilename = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
+        String extension = originalFilename.contains(".")
+                ? originalFilename.substring(originalFilename.lastIndexOf(".")) : "";
+        String uniqueFilename = UUID.randomUUID() + extension;
+        java.nio.file.Path uploadDir = Paths.get(UPLOADS_FOLDER);
+        if (!Files.exists(uploadDir)) Files.createDirectories(uploadDir);
+        Files.copy(file.getInputStream(), uploadDir.resolve(uniqueFilename), StandardCopyOption.REPLACE_EXISTING);
         return uniqueFilename;
     }
 

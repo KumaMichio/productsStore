@@ -1,0 +1,50 @@
+spring:
+  # ── Database (TiDB Serverless / any MySQL-compatible) ─────
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD}
+
+  # ── JPA (production) ──────────────────────────────────────
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: false
+
+  # ── Redis (Upstash — TLS required) ────────────────────────
+  data:
+    redis:
+      use-redis-cache: true
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      ssl:
+        enabled: ${REDIS_SSL:true}
+
+  # ── Kafka (disabled in prod — no Kafka server) ────────────
+  kafka:
+    bootstrap-servers: localhost:9092
+    listener:
+      auto-startup: false   # Prevent @KafkaListener from starting
+      missing-topics-fatal: false
+    producer:
+      retries: 0
+
+# ── Logging (production) ──────────────────────────────────
+logging:
+  level:
+    root: WARN
+    com.project.shopapp: INFO
+    org:
+      springframework:
+        security: WARN
+        web: WARN
+      hibernate:
+        SQL: WARN
+
+# ── Actuator (restrict in prod) ───────────────────────────
+management:
+  endpoint:
+    health:
+      show-details: never

@@ -3,36 +3,26 @@
 <div class="detail-page">
   <!-- Breadcrumb -->
   <div class="breadcrumb-bar">
-    <a routerLink="/" class="back-link">← Quay lại</a>
+    <a routerLink="/" class="back-link">← Back</a>
   </div>
 
+  @if(product) {
   <div class="detail-layout">
-    <!-- Left: Images -->
+    <!-- ── Left: Images ──────────────────────────────── -->
     <div class="images-col">
-      <!-- Main image -->
       <div class="main-image-wrap">
-        <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
-          <div class="carousel-inner">
-            @for(image of product?.product_images; track image.image_url; let i = $index) {
-              <div class="carousel-item" [ngClass]="{'active': i === currentImageIndex}">
-                <img [src]="image.image_url" class="main-img" alt="Product Image">
-              </div>
-            }
-          </div>
-          <button class="carousel-control-prev" type="button"
-            data-bs-target="#carouselExample" data-bs-slide="prev" (click)="previousImage()">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          </button>
-          <button class="carousel-control-next" type="button"
-            data-bs-target="#carouselExample" data-bs-slide="next" (click)="nextImage()">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          </button>
-        </div>
+        @for(image of product.product_images; track image.image_url; let i = $index) {
+          <img [src]="image.image_url" class="main-img"
+               alt="Product image"
+               [style.display]="i === currentImageIndex ? 'block' : 'none'">
+        }
+        @if(!product.product_images?.length) {
+          <div class="img-placeholder"></div>
+        }
       </div>
 
-      <!-- Thumbnails -->
       <div class="thumbnails">
-        @for(image of product?.product_images; track image.image_url; let i = $index) {
+        @for(image of product.product_images; track image.image_url; let i = $index) {
           <div class="thumb" [class.active]="i === currentImageIndex" (click)="thumbnailClick(i)">
             <img [src]="image.image_url" alt="Thumbnail">
           </div>
@@ -40,48 +30,85 @@
       </div>
     </div>
 
-    <!-- Right: Info -->
+    <!-- ── Right: Info ───────────────────────────────── -->
     <div class="info-col">
-<h1 class="product-name">{{ product?.name }}</h1>
-      <p class="product-price">${{ product?.price }}</p>
+      <p class="product-category-tag">{{ categoryName | uppercase }}</p>
+      <h1 class="product-name">{{ product.name }}</h1>
+      <p class="product-price">\${{ product.price | number:'1.2-2' }}</p>
+      <p class="product-desc">{{ product.description }}</p>
 
-      <p class="product-desc">{{ product?.description }}</p>
+      <!-- Size selector -->
+      <div class="size-section">
+        <p class="section-sublabel">SIZE</p>
+        <div class="size-chips">
+          @for(size of sizes; track size) {
+            <button class="size-chip"
+              [class.selected]="selectedSize === size"
+              (click)="selectedSize = size">{{ size }}</button>
+          }
+        </div>
+      </div>
 
-      <!-- Quantity -->
-      <div class="qty-row">
-        <span class="qty-label">SỐ LƯỢNG</span>
+      <!-- Qty + Add to bag -->
+      <div class="add-row">
         <div class="qty-control">
           <button class="qty-btn" (click)="decreaseQuantity()">−</button>
           <span class="qty-value">{{ quantity }}</span>
           <button class="qty-btn" (click)="increaseQuantity()">+</button>
         </div>
+        <button class="btn-add-cart" (click)="addToCart()">Add to bag</button>
       </div>
 
-      <p class="total-price">Tổng: <strong>${{ getTotalPrice() | number:'1.2-2' }}</strong></p>
-
-      <!-- Actions -->
-      <div class="action-buttons">
-        <button class="btn-add-cart" (click)="addToCart()">Thêm vào giỏ hàng</button>
-        <button class="btn-buy-now" (click)="buyNow()">Mua ngay</button>
+      <!-- Details -->
+      <div class="details-section">
+        <p class="section-sublabel">DETAILS</p>
+        <ul class="details-list">
+          @for(detail of productDetails; track detail) {
+            <li>{{ detail }}</li>
+          }
+        </ul>
       </div>
 
       <!-- Trust badges -->
       <div class="trust-badges">
         <div class="badge-item">
-          <span class="badge-title">Miễn phí vận chuyển</span>
-          <span class="badge-sub">Đơn từ $120</span>
+          <span class="badge-title">Free shipping</span>
+          <span class="badge-sub">Over $120</span>
         </div>
         <div class="badge-item">
-          <span class="badge-title">Đổi trả 30 ngày</span>
-          <span class="badge-sub">Không cần lý do</span>
+          <span class="badge-title">30-day returns</span>
+          <span class="badge-sub">No questions</span>
         </div>
         <div class="badge-item">
-          <span class="badge-title">Bảo hành 2 năm</span>
-          <span class="badge-sub">Chất lượng bền lâu</span>
+          <span class="badge-title">Made to last</span>
+          <span class="badge-sub">2-year warranty</span>
         </div>
       </div>
     </div>
   </div>
+
+  <!-- ── You may also like ──────────────────────────── -->
+  @if(relatedProducts.length > 0) {
+    <div class="related-section">
+      <hr class="section-divider">
+      <h2 class="related-heading">You may also like</h2>
+      <div class="related-grid">
+        @for(p of relatedProducts.slice(0, 3); track p.id) {
+          <div class="related-card" (click)="navigateToProduct(p.id)">
+            <div class="related-img-wrap">
+              <img [src]="p.url" [alt]="p.name" class="related-img">
+            </div>
+            <div class="related-info">
+              <span class="related-name">{{ p.name }}</span>
+              <span class="related-cat">Accessories</span>
+              <span class="related-price">\${{ p.price }}</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+  }
 </div>
 
 <app-footer></app-footer>

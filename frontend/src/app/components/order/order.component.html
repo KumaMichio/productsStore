@@ -1,163 +1,167 @@
 <app-header></app-header>
-<div class="container">
-    <div class="intro-section">
-        <h1>Đây là trang Order</h1>
-        <p>Sử dụng Bootstrap</p>
-    </div> 
-    <form [formGroup]="orderForm"> <!-- Thêm form và gán formGroup -->   
-    <div class="row">
-        <div class="col-md-5">
-            <h2 class="product-header">Thông tin người nhận</h2>
-                <div class="mb-3">
-                    <label for="fullname" class="form-label">Họ và tên</label>
-                    <input type="text" 
-                        formControlName="fullname" 
-                        class="form-control" 
-                        id="fullname" 
-                        [class.is-invalid]="orderForm.get('fullname')!.invalid && orderForm.get('fullname')!.touched">
-                    @if(orderForm.get('fullname')!.invalid &&
-                        orderForm.get('fullname')!.touched) {
-                        <div class="invalid-feedback">
-                            Họ và tên là trường bắt buộc.
-                        </div>
-                    }                        
+
+<div class="bag-page">
+
+  <!-- ── Bag header ──────────────────────────────────────── -->
+  <div class="bag-header">
+    <h1 class="bag-title">Your bag</h1>
+    <span class="bag-count">{{ cartItems.length }} {{ cartItems.length === 1 ? 'item' : 'items' }}</span>
+  </div>
+  <hr class="bag-divider">
+
+  <!-- ── Empty state ──────────────────────────────────────── -->
+  @if(cartItems.length === 0) {
+    <div class="bag-empty">
+      <h2 class="empty-title">Your bag is empty.</h2>
+      <p class="empty-sub">When you add something lovely, you'll find it here.</p>
+      <a routerLink="/" class="btn-continue">Continue shopping</a>
+    </div>
+  }
+
+  <!-- ── Bag with items ───────────────────────────────────── -->
+  @if(cartItems.length > 0) {
+    <div class="bag-layout">
+
+      <!-- Left: Cart items + checkout form -->
+      <div class="bag-left">
+
+        <!-- Item list -->
+        <div class="item-list">
+          <ng-container *ngFor="let item of cartItems; let i = index">
+            <div class="bag-item">
+              <div class="item-img-wrap">
+                <img [src]="item.product.thumbnail" [alt]="item.product.name" class="item-img">
+              </div>
+              <div class="item-details">
+                <span class="item-name">{{ item.product.name }}</span>
+                <span class="item-price">\${{ item.product.price | number:'1.2-2' }}</span>
+              </div>
+              <div class="item-qty">
+                <div class="qty-control">
+                  <button class="qty-btn" (click)="decreaseQuantity(i)">−</button>
+                  <span class="qty-val">{{ item.quantity }}</span>
+                  <button class="qty-btn" (click)="increaseQuantity(i)">+</button>
                 </div>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="text" 
-                        formControlName="email" 
-                        class="form-control" 
-                        id="email" 
-                        [class.is-invalid]="orderForm.get('email')!.invalid && orderForm.get('email')!.touched">
-                    @if(orderForm.get('email')!.invalid 
-                        && orderForm.get('email')!.touched) {
-                            <div
-                                class="invalid-feedback">
-                                {{ orderForm.get('email')!.hasError('email') ? 'Email không hợp lệ' : 'Email là trường bắt buộc' }}
-                            </div>
-                        }
-                    
-                </div>
-                
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Số điện thoại</label>
-                    <input type="text" 
-                        class="form-control" 
-                        formControlName="phone_number"                         
-                        placeholder="Số điện thoại" 
-                        required
-                        id="phone" 
-                        [class.is-invalid]="orderForm.get('phone_number')!.invalid && orderForm.get('phone_number')!.touched">
-                        @if(orderForm.get('phone_number')!.invalid 
-                            && orderForm.get('phone_number')!.touched) {
-                            <div class="invalid-feedback">
-                                Số điện thoại là trường bắt buộc và ít nhất 6 ký tự.
-                            </div>
-                        }                        
-                </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Địa chỉ</label>
-                    <input type="text" 
-                        class="form-control" 
-                        formControlName="address"                         
-                        placeholder="Địa chỉ" 
-                        required
-                        id="address" 
-                        [class.is-invalid]="orderForm.get('address')!.invalid && orderForm.get('address')!.touched">
-                    @if(orderForm.get('address')!.invalid 
-                        && orderForm.get('address')!.touched) {
-                    <div class="invalid-feedback">
-                        Địa chỉ là trường bắt buộc và ít nhất 5 ký tự.
-                    </div>
-                    }
-                    
-                </div>
-                <div class="mb-3">
-                    <label for="note" class="form-label">Ghi chú</label>
-                    <input type="text" 
-                        class="form-control" 
-                        formControlName="note"                                                 
-                        placeholder="Ghi chú" 
-                        required
-                        id="note">
-                </div>
-                <div class="mb-3">
-                    <label for="shippingMethod">Phương thức vận chuyển</label>
-                    <select class="form-control" id="shippingMethod" 
-                        formControlName="shipping_method">
-                        <option value="express">Nhanh (Express)</option>
-                        <option value="normal">Thường (Normal)</option>
-                    </select>
-                </div>
-                <div class="mb-3">
-                    <label for="paymentMethod">Phương thức thanh toán</label>
-                    <select class="form-control" id="paymentMethod"
-                        formControlName="payment_method">                     
-                        <option value="cod">Thanh toán khi nhận hàng (COD)</option>
-                        <option value="other">Thanh toán khác</option>
-                    </select>
-                </div>
-            <!-- </form> -->
-        </div>        
-        <div class="col-md-7">
-            <h2 class="product-order">Sản phẩm đã đặt hàng</h2>
-            <table>
-                <tbody>
-                    <ng-container *ngFor="let item of cartItems; let i = index">
-                      <tr>
-                        <td>
-                          <div class="product-info">
-                            <img [src]="item.product.thumbnail" alt="Product Image" class="product-image">
-                            <span class="product-name">{{ item.product.name }}</span>
-                          </div>
-                        </td>
-                        <td>
-                          <div class="product-quantity">
-                            <div class="border-wrapper">
-                              <button (click)="decreaseQuantity(i)">-</button>
-                              {{ item.quantity }}
-                              <button (click)="increaseQuantity(i)">+</button>
-                            </div>
-                          </div>
-                        </td>
-                        <td>{{ item.product.price | number:'1.2-2' }}</td>
-                        <td>{{ (item.product.price * item.quantity) | number:'1.2-2' }}</td>
-                        <td>
-                          <button class="btn btn-danger" (click)="confirmDelete(i)">
-                            Xóa
-                          </button>
-                        </td>
-                      </tr>
-                    </ng-container>
-                  </tbody>
-              
-        </table>   
-            <div class="text-start mt-3">
-                <h4 class="header-text text-end ">Tổng giá: {{ totalAmount | number:'1.2-2'}} đ</h4>
+                <span class="item-subtotal">\${{ (item.product.price * item.quantity) | number:'1.2-2' }}</span>
+              </div>
+              <button class="item-remove" (click)="confirmDelete(i)" aria-label="Remove">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              </button>
             </div>
-            <div class="mt-3">
-                <h4 class="product-header">Nhập coupon</h4>
-                <div class="input-group">
-                    <input type="text" class="form-control" 
-                        formControlName="couponCode" 
-                        placeholder="Nhập coupon">
-                    <button 
-                        (click)="applyCoupon()"
-                        class="btn btn-gradient" type="button">Áp dụng</button>
-                </div>
-            </div>    
-            @if(couponDiscount > 0) {
-                <div class="text-start mt-3">
-                    <h6 class="header-text text-end ">Bạn được discount: {{ couponDiscount | number:'1.2-2'}} đ</h6>
-                </div>
-            }
-            <div class="text-start mt-3">
-                <button 
-                    (click)="placeOrder()"
-                    class="btn btn-gradient" type="button">Đặt hàng</button>
-            </div>
+          </ng-container>
         </div>
-    </div>   
-</form> 
+
+        <hr class="section-hr">
+
+        <!-- Checkout form -->
+        <form [formGroup]="orderForm" class="checkout-form">
+          <h2 class="checkout-heading">Delivery details</h2>
+
+          <div class="form-grid">
+            <div class="field-group">
+              <label class="field-label">FULL NAME</label>
+              <input type="text" class="field-input" formControlName="fullname"
+                placeholder="Your name"
+                [class.is-invalid]="orderForm.get('fullname')!.invalid && orderForm.get('fullname')!.touched">
+              @if(orderForm.get('fullname')!.invalid && orderForm.get('fullname')!.touched) {
+                <span class="field-error">Full name is required.</span>
+              }
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">EMAIL</label>
+              <input type="text" class="field-input" formControlName="email"
+                placeholder="you@email.com"
+                [class.is-invalid]="orderForm.get('email')!.invalid && orderForm.get('email')!.touched">
+              @if(orderForm.get('email')!.invalid && orderForm.get('email')!.touched) {
+                <span class="field-error">{{ orderForm.get('email')!.hasError('email') ? 'Invalid email.' : 'Email is required.' }}</span>
+              }
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">PHONE</label>
+              <input type="text" class="field-input" formControlName="phone_number"
+                placeholder="Phone number"
+                [class.is-invalid]="orderForm.get('phone_number')!.invalid && orderForm.get('phone_number')!.touched">
+              @if(orderForm.get('phone_number')!.invalid && orderForm.get('phone_number')!.touched) {
+                <span class="field-error">Phone is required (min 6 characters).</span>
+              }
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">ADDRESS</label>
+              <input type="text" class="field-input" formControlName="address"
+                placeholder="Delivery address"
+                [class.is-invalid]="orderForm.get('address')!.invalid && orderForm.get('address')!.touched">
+              @if(orderForm.get('address')!.invalid && orderForm.get('address')!.touched) {
+                <span class="field-error">Address is required (min 5 characters).</span>
+              }
+            </div>
+
+            <div class="field-group field-group--full">
+              <label class="field-label">NOTE</label>
+              <input type="text" class="field-input" formControlName="note" placeholder="Any note for us?">
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">SHIPPING</label>
+              <select class="field-input" formControlName="shipping_method">
+                <option value="express">Express</option>
+                <option value="normal">Standard</option>
+              </select>
+            </div>
+
+            <div class="field-group">
+              <label class="field-label">PAYMENT</label>
+              <select class="field-input" formControlName="payment_method">
+                <option value="cod">Cash on delivery</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right: Summary -->
+      <div class="bag-summary">
+        <h3 class="summary-heading">Summary</h3>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>\${{ totalAmount | number:'1.2-2' }}</span>
+        </div>
+
+        <!-- Coupon -->
+        <div class="coupon-group">
+          <label class="field-label">COUPON CODE</label>
+          <div class="coupon-row">
+            <input type="text" class="field-input coupon-input"
+              [formControl]="$any(orderForm.get('couponCode'))"
+              placeholder="Enter code">
+            <button class="coupon-btn" (click)="applyCoupon()">Apply</button>
+          </div>
+        </div>
+
+        @if(couponDiscount > 0) {
+          <div class="summary-row summary-row--discount">
+            <span>Discount</span>
+            <span>−\${{ couponDiscount | number:'1.2-2' }}</span>
+          </div>
+        }
+
+        <hr class="summary-hr">
+        <div class="summary-row summary-row--total">
+          <span>Total</span>
+          <span>\${{ (totalAmount - couponDiscount) | number:'1.2-2' }}</span>
+        </div>
+
+        <button class="btn-place-order" (click)="placeOrder()">Place order</button>
+      </div>
+    </div>
+  }
+
 </div>
+
 <app-footer></app-footer>

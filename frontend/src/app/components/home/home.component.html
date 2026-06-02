@@ -1,31 +1,169 @@
 <app-header></app-header>
 
-<!-- Hero -->
+<!-- ── Hero ─────────────────────────────────────────────── -->
 <section class="hero">
-  <div class="hero-text">
-    <h1 class="hero-title">Sản phẩm tốt,<br><em>dùng mãi bền lâu.</em></h1>
-    <p class="hero-sub">Bộ sưu tập hàng ngày — nguồn gốc rõ ràng, chất lượng đảm bảo.</p>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <h1 class="hero-title">Quiet objects,<br><em>made to last.</em></h1>
+    </div>
+    <div class="hero-right">
+      <p class="hero-sub">A small catalogue of everyday goods — sourced from independent makers and shipped from our studio in Lisbon. New pieces every Friday.</p>
+    </div>
   </div>
 </section>
 
-<!-- Search & Filter -->
-<div class="search-bar">
-  <div class="search-inner">
-    <input type="text" class="form-control search-input"
-      placeholder="Tìm sản phẩm..."
-      [(ngModel)]="keyword">
-    <select class="form-control category-select" [(ngModel)]="selectedCategoryId">
-      <option [value]="0">Tất cả danh mục</option>
-      @for(category of categories; track category.name) {
-        <option [value]="category.id">{{ category.name }}</option>
-      }
-    </select>
-    <button class="btn btn-primary search-btn" (click)="searchProducts()">Tìm kiếm</button>
-  </div>
-</div>
+<!-- ── Bento product grid ───────────────────────────────── -->
+@if(products.length >= 4) {
+<section class="bento-section">
+  <div class="bento-outer">
 
-<!-- Product Grid -->
-<section class="product-section">
+    <!-- Left: large featured card -->
+    <div class="bento-hero" (click)="onProductClick(products[0].id)">
+      <img [src]="products[0].url" [alt]="products[0].name" class="bento-img">
+      <div class="bento-hero-overlay">
+        <span class="overlay-label">THE AUTUMN EDIT</span>
+        <p class="overlay-tagline">Soft, warm, undyed.</p>
+        <button class="overlay-arrow" (click)="$event.stopPropagation(); onProductClick(products[0].id)">↗</button>
+      </div>
+    </div>
+
+    <!-- Right: stacked cards -->
+    <div class="bento-right-col">
+
+      <!-- Wide card -->
+      <div class="bento-card" (click)="onProductClick(products[1].id)">
+        <img [src]="products[1].url" [alt]="products[1].name" class="bento-img">
+        <div class="bento-card-info">
+          <div class="card-meta">
+            <span class="card-name">{{ products[1].name }}</span>
+            <span class="card-cat">Apparel</span>
+          </div>
+          <span class="card-price">\${{ products[1].price }}</span>
+        </div>
+      </div>
+
+      <!-- Two half-width cards -->
+      <div class="bento-row-half">
+        <div class="bento-card" (click)="onProductClick(products[2].id)">
+          <img [src]="products[2].url" [alt]="products[2].name" class="bento-img">
+          <div class="bento-card-info">
+            <div class="card-meta">
+              <span class="card-name">{{ products[2].name }}</span>
+              <span class="card-cat">Accessories</span>
+            </div>
+            <span class="card-price">\${{ products[2].price }}</span>
+          </div>
+        </div>
+        @if(products[3]) {
+          <div class="bento-card" (click)="onProductClick(products[3].id)">
+            <img [src]="products[3].url" [alt]="products[3].name" class="bento-img">
+            <div class="bento-card-info">
+              <div class="card-meta">
+                <span class="card-name">{{ products[3].name }}</span>
+                <span class="card-cat">Beauty</span>
+              </div>
+              <span class="card-price">\${{ products[3].price }}</span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Wide card -->
+      @if(products[4]) {
+        <div class="bento-card" (click)="onProductClick(products[4].id)">
+          <img [src]="products[4].url" [alt]="products[4].name" class="bento-img">
+          <div class="bento-card-info">
+            <div class="card-meta">
+              <span class="card-name">{{ products[4].name }}</span>
+              <span class="card-cat">Home</span>
+            </div>
+            <span class="card-price">\${{ products[4].price }}</span>
+          </div>
+        </div>
+      }
+
+    </div>
+  </div>
+</section>
+}
+
+<!-- ── Journal + Letter row ─────────────────────────────── -->
+<section class="content-row-section">
+  <div class="content-row">
+
+    <!-- Journal card -->
+    <div class="journal-card">
+      <span class="section-label">JOURNAL · NO. 12</span>
+      <h3 class="journal-title">On the slow practice of choosing fewer, better things.</h3>
+      <a class="read-link">Read the essay ↗</a>
+    </div>
+
+    <!-- Linen tote + Newsletter pair -->
+    <div class="bottom-right-pair">
+      @if(products[5]) {
+        <div class="bento-card bento-card--sm" (click)="onProductClick(products[5].id)">
+          <img [src]="products[5].url" [alt]="products[5].name" class="bento-img">
+          <div class="bento-card-info">
+            <div class="card-meta">
+              <span class="card-name">{{ products[5].name }}</span>
+              <span class="card-cat">Accessories</span>
+            </div>
+            <span class="card-price">\${{ products[5].price }}</span>
+          </div>
+        </div>
+      }
+      <div class="letter-card">
+        <span class="section-label letter-label">LETTER</span>
+        <h3 class="letter-title">A monthly note from the studio.</h3>
+        <div class="newsletter-form">
+          <input type="email" [(ngModel)]="newsletterEmail"
+            placeholder="you@email.com" class="newsletter-input">
+          <button class="newsletter-btn">Join</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Browse by category ────────────────────────────────── -->
+@if(categories.length > 0) {
+<section class="categories-section">
+  <div class="section-header-row">
+    <h2 class="section-heading">Browse by category</h2>
+    <a class="view-all-link" (click)="searchProducts()">View all →</a>
+  </div>
+  <div class="categories-grid">
+    @for(cat of categories.slice(0, 4); track cat.id) {
+      <div class="category-card" (click)="filterByCategory(cat.id)">
+        <div class="cat-img-wrap">
+          @if(getProductByCategory(cat.id); as p) {
+            <img [src]="p.url" [alt]="cat.name" class="cat-img">
+          } @else {
+            <div class="cat-placeholder"></div>
+          }
+        </div>
+        <span class="cat-label">{{ cat.name }}</span>
+      </div>
+    }
+  </div>
+</section>
+}
+
+<!-- ── Full product grid ─────────────────────────────────── -->
+<section class="products-section">
+  <div class="products-header">
+    <h2 class="products-heading">All products</h2>
+    <div class="cat-tabs">
+      <button class="cat-tab" [class.active]="selectedCategoryId === 0"
+        (click)="filterByCategory(0)">All</button>
+      @for(cat of categories.slice(0, 5); track cat.id) {
+        <button class="cat-tab" [class.active]="selectedCategoryId === cat.id"
+          (click)="filterByCategory(cat.id)">{{ cat.name }}</button>
+      }
+    </div>
+  </div>
+
   <div class="product-grid">
     @for(product of products; track product.id) {
       <div class="product-card" (click)="onProductClick(product.id)">
@@ -33,14 +171,13 @@
           <img [src]="product.url" [alt]="product.name" class="product-img">
         </div>
         <div class="product-info">
-    <h3 class="product-name">{{ product.name }}</h3>
-          <p class="product-price">${{ product.price }}</p>
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-price">\${{ product.price }}</p>
         </div>
       </div>
     }
   </div>
 
-  <!-- Pagination -->
   <div class="pagination-wrap">
     <nav>
       <ul class="pagination">

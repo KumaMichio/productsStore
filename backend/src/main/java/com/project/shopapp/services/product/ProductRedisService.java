@@ -50,6 +50,7 @@ public class ProductRedisService implements IProductRedisService{
     }
     @Override
     public void clear(){
+        if (!useRedisCache) return;
         redisTemplate.getConnectionFactory().getConnection().flushAll();
     }
 

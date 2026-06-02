@@ -1,104 +1,357 @@
 @import '../../styles/shared-styles.scss';
 
-.container {
-    color: white;
-}
-.intro-section {
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
-.product-header {
-    color: $shopapp-tint-color;
-}
-.form-control {
-    background-color: $shopapp-background-color;
-    border: 1px solid rgb(29, 33, 54);
-    color: white;
+.bag-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem 6rem;
+  min-height: 70vh;
 }
 
-.form-control:focus {
-    border-color: white;
-    background-color: $shopapp-background-color;
-}
-.form-label {
-    color: white;
-}
-.product-header {
-    color: $shopapp-tint-color;
-}
-.product-order {
-    color: $shopapp-title-color;
-}
-table {
-    width: 100%;
-    border-radius: 10px;
-    border: none;
-    border-collapse: separate;
-    border: 1px solid white;
-    border-spacing: 0;
-    background-color: $shopapp-background-color;    
+// ── Header ───────────────────────────────────────────────────
+.bag-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
 }
 
-th,
-td {
-    padding: 10px;
-    text-align: center;
-}
-.product-info {
-    display: flex;
-    align-items: center;
+.bag-title {
+  font-family: $font-serif;
+  font-size: 2.2rem;
+  font-weight: 400;
+  color: $color-text;
+  margin: 0;
 }
 
-.product-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 5px;
-    margin-right: 10px;
+.bag-count {
+  font-family: $font-sans;
+  font-size: 0.85rem;
+  color: $color-muted;
 }
 
-.product-name {
-    color: white;
-    margin-right: 10px;    
-    text-align: left;
+.bag-divider {
+  border: none;
+  border-top: 1px solid $color-border;
+  margin: 0 0 3rem;
 }
 
-.btn-gradient {
-    background: linear-gradient(to right, $shopapp-tint-color, $shopapp-color);
-    color: white;
-    border-radius: 30px;
-    width: 200px;
+// ── Empty state ──────────────────────────────────────────────
+.bag-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0 6rem;
+  text-align: center;
 }
 
-.border-wrapper {
-    border: 1px solid white;
+.empty-title {
+  font-family: $font-serif;
+  font-size: 1.5rem;
+  font-weight: 400;
+  font-style: italic;
+  color: $color-text;
+  margin-bottom: 0.75rem;
 }
 
-.product-quantity {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    margin-top: 10px;
+.empty-sub {
+  font-family: $font-sans;
+  font-size: 0.88rem;
+  color: $color-muted;
+  margin-bottom: 2rem;
 }
 
-.product-quantity button {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
+.btn-continue {
+  display: inline-block;
+  background-color: $color-accent;
+  color: $color-white;
+  font-family: $font-sans;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 0.8rem 2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-decoration: none;
+
+  &:hover {
+    background-color: $color-accent-hover;
+    color: $color-white;
+  }
 }
 
-.product-quantity input {
-    background-color: transparent;
-    border: none;
-    color: white;
-    font-size: 16px;
-    text-align: center;
-    width: 40px;
-    margin: 0 10px;
+// ── Items + Checkout layout ──────────────────────────────────
+.bag-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 4rem;
+  align-items: flex-start;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
 }
 
-.product-quantity input:focus {
-    outline: none;
+// ── Item list ────────────────────────────────────────────────
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.bag-item {
+  display: grid;
+  grid-template-columns: 72px 1fr auto auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid $color-bg-alt;
+}
+
+.item-img-wrap {
+  width: 72px;
+  height: 90px;
+  background: $color-bg-alt;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.item-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.item-name {
+  font-family: $font-sans;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: $color-text;
+}
+
+.item-price {
+  font-family: $font-sans;
+  font-size: 0.82rem;
+  color: $color-muted;
+}
+
+.item-qty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid $color-border;
+  border-radius: 2px;
+}
+
+.qty-btn {
+  background: none;
+  border: none;
+  width: 30px;
+  height: 30px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text;
+  transition: background 0.15s;
+
+  &:hover { background: $color-bg-alt; }
+}
+
+.qty-val {
+  width: 28px;
+  text-align: center;
+  font-family: $font-sans;
+  font-size: 0.82rem;
+  border-left: 1px solid $color-border;
+  border-right: 1px solid $color-border;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-subtotal {
+  font-family: $font-sans;
+  font-size: 0.78rem;
+  color: $color-muted;
+}
+
+.item-remove {
+  background: none;
+  border: none;
+  color: $color-muted;
+  cursor: pointer;
+  padding: 4px;
+  transition: color 0.15s;
+  line-height: 0;
+  align-self: flex-start;
+
+  &:hover { color: $color-text; }
+}
+
+// ── Checkout form ────────────────────────────────────────────
+.section-hr {
+  border: none;
+  border-top: 1px solid $color-border;
+  margin: 2rem 0;
+}
+
+.checkout-heading {
+  font-family: $font-serif;
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: $color-text;
+  margin-bottom: 1.5rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+
+  @media (max-width: 500px) { grid-template-columns: 1fr; }
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+
+  &--full { grid-column: 1 / -1; }
+}
+
+.field-label {
+  font-family: $font-sans;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: $color-muted;
+}
+
+.field-input {
+  border: 1px solid $color-border;
+  border-radius: 3px;
+  background: $color-white;
+  color: $color-text;
+  font-family: $font-sans;
+  font-size: 0.88rem;
+  padding: 0.65rem 0.8rem;
+  transition: border-color 0.15s;
+  width: 100%;
+  appearance: none;
+
+  &::placeholder { color: $color-muted; }
+  &:focus { border-color: $color-text; outline: none; box-shadow: none; }
+  &.is-invalid { border-color: #C0392B; }
+}
+
+.field-error {
+  font-family: $font-sans;
+  font-size: 0.75rem;
+  color: #C0392B;
+}
+
+// ── Summary panel ────────────────────────────────────────────
+.bag-summary {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 4px;
+  padding: 1.75rem;
+  position: sticky;
+  top: 80px;
+}
+
+.summary-heading {
+  font-family: $font-serif;
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: $color-text;
+  margin-bottom: 1.25rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: $font-sans;
+  font-size: 0.85rem;
+  color: $color-muted;
+  margin-bottom: 0.75rem;
+
+  &--discount { color: #2E6B2E; }
+  &--total {
+    font-size: 1rem;
+    font-weight: 500;
+    color: $color-text;
+    margin-top: 0.5rem;
+    margin-bottom: 0;
+  }
+}
+
+.coupon-group {
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.coupon-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.coupon-input { flex: 1; }
+
+.coupon-btn {
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 3px;
+  font-family: $font-sans;
+  font-size: 0.82rem;
+  color: $color-text;
+  padding: 0.65rem 0.9rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+
+  &:hover { background: $color-bg-alt; }
+}
+
+.summary-hr {
+  border: none;
+  border-top: 1px solid $color-border;
+  margin: 1rem 0;
+}
+
+.btn-place-order {
+  width: 100%;
+  background-color: $color-accent;
+  color: $color-white;
+  border: none;
+  border-radius: 3px;
+  font-family: $font-sans;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  padding: 0.85rem;
+  margin-top: 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover { background-color: $color-accent-hover; }
 }

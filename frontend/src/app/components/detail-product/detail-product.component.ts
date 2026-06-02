@@ -8,6 +8,7 @@ import { ProductImage } from '../../models/product.image';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { CommonModule } from '@angular/common';
+import { resolveImageUrl } from '../../utils/image.util';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ApiResponse } from '../../responses/api.response';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
@@ -31,7 +32,20 @@ export class DetailProductComponent implements OnInit {
   productId: number = 0;
   currentImageIndex: number = 0;
   quantity: number = 1;
-  isPressedAddToCart:boolean = false;
+  isPressedAddToCart: boolean = false;
+  selectedSize: string = 'S';
+  sizes: string[] = ['XS', 'S', 'M', 'L'];
+  relatedProducts: Product[] = [];
+  categoryName: string = 'Product';
+
+  get productDetails(): string[] {
+    if (!this.product?.description) return [];
+    return this.product.description.split(/[,;]/).map(s => s.trim()).filter(Boolean).slice(0, 5);
+  }
+
+  navigateToProduct(id: number): void {
+    this.router.navigate(['/products', id]);
+  }
   constructor(
     private productService: ProductService,
     private cartService: CartService,
@@ -58,14 +72,14 @@ export class DetailProductComponent implements OnInit {
             const response = apiResponse.data
             debugger
             if (response.product_images && response.product_images.length > 0) {
-              response.product_images.forEach((product_image:ProductImage) => {
-                product_image.image_url = `${environment.apiBaseUrl}/products/images/${product_image.image_url}`;
+              response.product_images.forEach((product_image: ProductImage) => {
+                product_image.image_url = resolveImageUrl(product_image.image_url);
               });
             }            
             debugger
-            this.product = response 
-            // Bắt đầu với ảnh đầu tiên
+            this.product = response;
             this.showImage(0);
+            this.loadRelatedProducts(response.category_id);
           },
           complete: () => {
             debugger;
@@ -79,6 +93,21 @@ export class DetailProductComponent implements OnInit {
         console.error('Invalid productId:', idParam);
       }      
     }
+    loadRelatedProducts(categoryId: number): void {
+      this.productService.getProducts('', categoryId, 0, 6).subscribe({
+        next: (apiResponse: ApiResponse) => {
+          const products: Product[] = (apiResponse.data?.products ?? [])
+            .filter((p: Product) => p.id !== this.productId)
+            .slice(0, 3);
+          products.forEach((p: Product) => {
+            p.url = resolveImageUrl(p.thumbnail);
+          });
+          this.relatedProducts = products;
+        },
+        error: () => {}
+      });
+    }
+
     showImage(index: number): void {
       debugger
       if (this.product && this.product.product_images && 

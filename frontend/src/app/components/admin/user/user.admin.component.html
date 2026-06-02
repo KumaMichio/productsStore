@@ -28,7 +28,7 @@
           </td>
           <td class="cell-muted">{{ user.phone_number }}</td>
           <td class="cell-muted">{{ user.address || '—' }}</td>
-          <td class="cell-muted">{{ user.role?.name | titlecase }}</td>
+          <td class="cell-muted">{{ user.role.name | titlecase }}</td>
           <td>
             <span class="status-badge" [ngClass]="user.is_active ? 'status-active' : 'status-blocked'">
               {{ user.is_active ? 'Active' : 'Blocked' }}

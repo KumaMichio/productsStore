@@ -1,0 +1,53 @@
+version: '3.8'
+
+# Development compose — starts infrastructure only.
+# Run backend and frontend locally (npm start, mvn spring-boot:run).
+# Usage: docker-compose -f docker-compose.dev.yml up -d
+
+services:
+
+  mysql8-container:
+    image: mysql:8.2.0
+    container_name: mysql8-container
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: Abc123456789@
+      MYSQL_DATABASE: ShopApp
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_dev_data:/var/lib/mysql
+    networks:
+      - shopapp-network
+
+  phpmyadmin8-container:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin8-container
+    restart: unless-stopped
+    depends_on:
+      - mysql8-container
+    ports:
+      - "8100:80"
+    environment:
+      PMA_HOST: mysql8-container
+    networks:
+      - shopapp-network
+
+  redis-container:
+    image: redis:7.2-alpine
+    container_name: redis-container
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis-data:/data
+    networks:
+      - shopapp-network
+
+volumes:
+  mysql_dev_data:
+
+networks:
+  shopapp-network:
+    name: shopapp-network
+    driver: bridge

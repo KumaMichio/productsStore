@@ -138,19 +138,20 @@ public class ProductController {
     @GetMapping("/images/{imageName}")
     public ResponseEntity<?> viewImage(@PathVariable String imageName) {
         try {
-            java.nio.file.Path imagePath = Paths.get("uploads/"+imageName);
+            java.nio.file.Path imagePath = Paths.get("uploads/" + imageName);
             UrlResource resource = new UrlResource(imagePath.toUri());
-
-            if (resource.exists()) {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG)
-                        .body(resource);
-            } else {
-                return ResponseEntity.ok()
-                        .contentType(MediaType.IMAGE_JPEG)
-                        .body(new UrlResource(Paths.get("uploads/notfound.jpeg").toUri()));
-                //return ResponseEntity.notFound().build();
+            if (!resource.exists()) {
+                java.nio.file.Path fallback = Paths.get("uploads/notfound.jpeg");
+                resource = new UrlResource(fallback.toUri());
+                if (!resource.exists()) return ResponseEntity.notFound().build();
+                return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(resource);
             }
+            MediaType mediaType = MediaType.IMAGE_JPEG;
+            String lower = imageName.toLowerCase();
+            if (lower.endsWith(".png"))  mediaType = MediaType.IMAGE_PNG;
+            else if (lower.endsWith(".gif"))  mediaType = MediaType.IMAGE_GIF;
+            else if (lower.endsWith(".webp")) mediaType = MediaType.parseMediaType("image/webp");
+            return ResponseEntity.ok().contentType(mediaType).body(resource);
         } catch (Exception e) {
             return ResponseEntity.notFound().build();
         }

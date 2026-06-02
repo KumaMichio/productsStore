@@ -1,117 +1,179 @@
 @import '../../styles/shared-styles.scss';
 
+// ── Page wrapper ─────────────────────────────────────────────
 .container {
-    color: white;
-    height: 100vh;    
+  min-height: 100vh;
+  padding-top: 60px;
+  padding-bottom: 60px;
+  background-color: $color-bg;
 }
 
+// ── Card ─────────────────────────────────────────────────────
 .register-form {
-    background-color: $shopapp-background-color;
-    border-radius: 10px;
-    padding: 20px;
-    max-width: 500px;
-    border: 1px solid rgb(32, 34, 60);
-    align-items: center;
-    justify-content: center;
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 8px;
+  padding: 36px 32px 28px;
+  width: 100%;
+  max-width: 460px;
+  margin: 0 auto;
 }
 
+// ── Header ───────────────────────────────────────────────────
 .register-header {
-    text-align: center;
-    /*      color: rgb(233, 66, 178);*/
-    color: $shopapp-title-color;
-    margin-bottom: 20px;
+  font-family: $font-serif;
+  font-size: 1.75rem;
+  font-weight: 400;
+  color: $color-text;
+  text-align: center;
+  margin-bottom: 28px;
+}
 
+// ── Labels ───────────────────────────────────────────────────
+.form-group label {
+  font-family: $font-sans;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $color-muted;
+  margin-bottom: 6px;
+  display: block;
 }
 
 .label-text {
-    color: rgb(243, 165, 42);
+  font-family: $font-sans;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: $color-muted;
 }
 
+// ── Inputs ───────────────────────────────────────────────────
 .form-control {
-    background-color: transparent;
-    border: none;
-    color: white;
-}
+  background-color: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 4px;
+  color: $color-text;
+  font-family: $font-sans;
+  font-size: 0.9rem;
+  padding: 9px 12px;
+  width: 100%;
+  transition: border-color 0.15s;
 
-.form-control:focus {
-    color: white;
-    background-color: transparent;
+  &::placeholder {
+    color: $color-muted;
+    opacity: 1;
+  }
+
+  &:focus {
+    background-color: $color-white;
+    border-color: $color-text;
+    color: $color-text;
     outline: none;
     box-shadow: none;
-    border-color: transparent;
-    padding-left: 0;
+    padding-left: 12px;
+  }
+
+  &:-ms-input-placeholder { color: $color-muted; }
+  &::-ms-input-placeholder { color: $color-muted; }
 }
 
-.password-field {
-    position: relative;
+// ── Dividers (thin underline under each field) ───────────────
+.divider-nospace {
+  display: none;
+}
+
+// ── Password input wrapper ───────────────────────────────────
+.input-wrapper {
+  position: relative;
+
+  .form-control {
+    padding-right: 40px;
+  }
 }
 
 .password-toggle {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    color: $shopapp-title-color;
-    cursor: pointer;
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  color: $color-muted;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: color 0.15s;
+
+  &:hover { color: $color-text; }
 }
 
+.field-error {
+  font-family: $font-sans;
+  font-size: 0.8rem;
+  margin-top: 4px;
+  margin-bottom: 0;
+}
+
+// ── Checkbox row ─────────────────────────────────────────────
 .checkbox-text {
-    color: rgb(243, 165, 42);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 10px;
-}
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
 
-/* Màu checkbox khi được chọn */
-.checkbox-text input[type="checkbox"]:checked {
-    border-color: white;
-    background-color: $shopapp-tint-color;
+  .form-check-label {
+    font-family: $font-sans;
+    font-size: 0.85rem;
+    color: $color-text;
+  }
 }
 
 .form-check-input {
-    margin-right: 5px;
+  margin-right: 6px;
+  accent-color: $color-accent;
+}
+
+// ── Register button ──────────────────────────────────────────
+.register-button {
+  background-color: $color-accent;
+  color: $color-white;
+  border: none;
+  border-radius: 4px;
+  width: 100%;
+  padding: 11px 0;
+  margin-top: 20px;
+  font-family: $font-sans;
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.15s;
+
+  &:hover { background-color: $color-accent-hover; }
+}
+
+// ── Bottom divider & link ─────────────────────────────────────
+.divider {
+  height: 1px;
+  background-color: $color-border;
+  margin: 20px 0;
+}
+
+.text-center {
+  font-family: $font-sans;
+  font-size: 0.85rem;
+  color: $color-muted;
+  text-align: center;
 }
 
 .register-link {
-    color: $shopapp-title-color;
-    text-decoration: none;
-}
+  color: $color-accent;
+  text-decoration: none;
+  font-weight: 500;
 
-.register-button {
-    background: linear-gradient(to right, $shopapp-tint-color, $shopapp-color);
-    color: white;
-    border-radius: 30px;
-    width: 100%;
-    padding: 10px 0;
-    margin-top: 20px;
-    border: none;
-}
-
-.divider {
-    height: 1px;
-    background-color: rgb(243, 165, 42);
-    /*      background-color: rgb(105, 244, 181)*/
-    margin: 20px;
-}
-
-.divider-nospace {
-    border-top: 1px solid white;
-}
-
-.form-control::placeholder {
-    /* Chrome, Firefox, Opera, Safari 10.1+ */
-    color: rgba(243, 165, 42, 0.4);
-    opacity: 1;
-    /* Firefox */
-}
-
-.form-control:-ms-input-placeholder {
-    /* Internet Explorer 10-11 */
-    color: rgba(243, 165, 42, 0.4);
-}
-
-.form-control::-ms-input-placeholder {
-    /* Microsoft Edge */
-    color: rgba(243, 165, 42, 0.4);
+  &:hover {
+    color: $color-accent-hover;
+    text-decoration: underline;
+  }
 }

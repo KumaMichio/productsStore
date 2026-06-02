@@ -15,7 +15,7 @@ export interface OrderResponse {
     shipping_address: string;
     shipping_date: Date; // Dạng chuỗi ISO 8601
     payment_method: string;
-    order_details: OrderDetail[]; // Đảm bảo có một interface OrderDetail tương ứng
+    order_details?: OrderDetail[];
   }
   
   

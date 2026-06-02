@@ -5,13 +5,13 @@ import { Product } from '../../../../models/product';
 import { Category } from '../../../../models/category';
 import { ProductService } from '../../../../services/product.service';
 import { CategoryService } from '../../../../services/category.service';
-import { environment } from '../../../../../environments/environment';
+import { resolveImageUrl } from '../../../../utils/image.util';
 import { ProductImage } from '../../../../models/product.image';
 import { UpdateProductDTO } from '../../../../dtos/product/update.product.dto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ApiResponse } from '../../../../responses/api.response';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-detail.product.admin',
@@ -28,9 +28,12 @@ export class UpdateProductAdminComponent implements OnInit {
   productId: number;
   product: Product;
   updatedProduct: Product;
-  categories: Category[] = []; // Dữ liệu động từ categoryService
+  categories: Category[] = [];
   currentImageIndex: number = 0;
   images: File[] = [];
+
+  toast: { message: string; type: 'success' | 'error' } | null = null;
+  private toastTimer: any = null;
 
   constructor(
     private productService: ProductService,
@@ -54,39 +57,41 @@ export class UpdateProductAdminComponent implements OnInit {
   getCategories(page: number, limit: number) {
     this.categoryService.getCategories(page, limit).subscribe({
       next: (apiResponse: ApiResponse) => {
-        debugger;
         this.categories = apiResponse.data;
       },
-      complete: () => {
-        debugger;
-      },
       error: (error: HttpErrorResponse) => {
-        debugger;
         console.error(error?.error?.message ?? '');
-      } 
+      }
     });
   }
   getProductDetails(): void {
     this.productService.getDetailProduct(this.productId).subscribe({
       next: (apiResponse: ApiResponse) => {
-
         this.product = apiResponse.data;
-        this.updatedProduct = { ...apiResponse.data };                
-        this.updatedProduct.product_images.forEach((product_image:ProductImage) => {
-          product_image.image_url = `${environment.apiBaseUrl}/products/images/${product_image.image_url}`;
+        this.updatedProduct = { ...apiResponse.data };
+        this.updatedProduct.product_images.forEach((product_image: ProductImage) => {
+          product_image.image_url = resolveImageUrl(product_image.image_url);
         });
       },
-      complete: () => {
-        
-      },
       error: (error: HttpErrorResponse) => {
-        debugger;
         console.error(error?.error?.message ?? '');
-      } 
-    });     
+      }
+    });
   }
+  showToast(message: string, type: 'success' | 'error') {
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.toast = { message, type };
+    this.toastTimer = setTimeout(() => { this.toast = null; }, 3000);
+  }
+
+  private extractErrorMessage(error: HttpErrorResponse, fallback: string): string {
+    if (error.error instanceof SyntaxError || typeof error.error === 'string') {
+      return fallback;
+    }
+    return error?.error?.message || fallback;
+  }
+
   updateProduct() {
-    // Implement your update logic here
     const updateProductDTO: UpdateProductDTO = {
       name: this.updatedProduct.name,
       price: this.updatedProduct.price,
@@ -94,84 +99,65 @@ export class UpdateProductAdminComponent implements OnInit {
       category_id: this.updatedProduct.category_id
     };
     this.productService.updateProduct(this.product.id, updateProductDTO).subscribe({
-      next: (apiResponse: ApiResponse) => {  
-        debugger        
-      },
-      complete: () => {
-        debugger;
-        this.router.navigate(['/admin/products']);        
+      next: () => {
+        this.showToast('Product updated successfully!', 'success');
+        setTimeout(() => this.router.navigate(['/admin/products']), 1500);
       },
       error: (error: HttpErrorResponse) => {
-        debugger;
-        console.error(error?.error?.message ?? '');
-      } 
-    });  
+        this.showToast(this.extractErrorMessage(error, 'Update failed. Please try again.'), 'error');
+      }
+    });
   }
   showImage(index: number): void {
-    debugger
-    if (this.product && this.product.product_images && 
+    if (this.product && this.product.product_images &&
         this.product.product_images.length > 0) {
-      // Đảm bảo index nằm trong khoảng hợp lệ        
       if (index < 0) {
         index = 0;
       } else if (index >= this.product.product_images.length) {
         index = this.product.product_images.length - 1;
-      }        
-      // Gán index hiện tại và cập nhật ảnh hiển thị
+      }
       this.currentImageIndex = index;
     }
   }
   thumbnailClick(index: number) {
-    debugger
-    // Gọi khi một thumbnail được bấm
-    this.currentImageIndex = index; // Cập nhật currentImageIndex
-  }  
+    this.currentImageIndex = index;
+  }
   nextImage(): void {
-    debugger
     this.showImage(this.currentImageIndex + 1);
   }
 
   previousImage(): void {
-    debugger
     this.showImage(this.currentImageIndex - 1);
-  }  
+  }
   onFileChange(event: any) {
-    // Retrieve selected files from input element
     const files = event.target.files;
-    // Limit the number of selected files to 5
     if (files.length > 5) {
       console.error('Please select a maximum of 5 images.');
       return;
     }
-    // Store the selected files in the newProduct object
     this.images = files;
     this.productService.uploadImages(this.productId, this.images).subscribe({
-      next: (apiResponse: ApiResponse) => {
-        debugger
-        // Handle the uploaded images response if needed              
-        console.log('Images uploaded successfully:', apiResponse);
-        this.images = [];       
-        // Reload product details to reflect the new images
-        this.getProductDetails(); 
+      next: () => {
+        this.images = [];
+        this.showToast('Images uploaded successfully!', 'success');
+        this.getProductDetails();
       },
       error: (error: HttpErrorResponse) => {
-        debugger;
-        console.error(error?.error?.message ?? '');
-      } 
+        this.showToast(this.extractErrorMessage(error, 'Image upload failed.'), 'error');
+      }
     })
   }
   deleteImage(productImage: ProductImage) {
     if (confirm('Are you sure you want to remove this image?')) {
-      // Call the removeImage() method to remove the image   
       this.productService.deleteProductImage(productImage.id).subscribe({
-        next:(productImage: ProductImage) => {
-          location.reload();          
-        },        
+        next: () => {
+          this.showToast('Image removed.', 'success');
+          this.getProductDetails();
+        },
         error: (error: HttpErrorResponse) => {
-          debugger;
-          console.error(error?.error?.message ?? '');
-        } 
+          this.showToast(this.extractErrorMessage(error, 'Failed to remove image.'), 'error');
+        }
       });
-    }   
+    }
   }
 }

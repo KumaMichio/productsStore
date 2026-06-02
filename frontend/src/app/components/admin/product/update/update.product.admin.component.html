@@ -1,5 +1,12 @@
+@if(toast) {
+  <div class="toast-notification" [ngClass]="'toast-' + toast.type">
+    <span class="toast-icon">{{ toast.type === 'success' ? '✓' : '✕' }}</span>
+    {{ toast.message }}
+  </div>
+}
+
 @if(product) {
-<div>      
+<div>
     <!-- Form cập nhật thông tin sản phẩm -->
     <div class="container">
       <div class="row">

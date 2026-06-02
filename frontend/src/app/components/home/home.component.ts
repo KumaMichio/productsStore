@@ -12,6 +12,7 @@ import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { resolveImageUrl } from '../../utils/image.util';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -28,16 +29,28 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 })
 export class HomeComponent implements OnInit {
   products: Product[] = [];
-  categories: Category[] = []; // Dữ liệu động từ categoryService
-  selectedCategoryId: number  = 0; // Giá trị category được chọn
+  categories: Category[] = [];
+  selectedCategoryId: number = 0;
   currentPage: number = 0;
   itemsPerPage: number = 12;
   pages: number[] = [];
-  totalPages:number = 0;
+  totalPages: number = 0;
   visiblePages: number[] = [];
-  keyword:string = "";
-  localStorage?:Storage;
+  keyword: string = "";
+  newsletterEmail: string = "";
+  localStorage?: Storage;
   apiBaseUrl = environment.apiBaseUrl;
+
+  getProductByCategory(categoryId: number): Product | undefined {
+    return this.products.find(p => p.category_id === categoryId);
+  }
+
+  filterByCategory(categoryId: number): void {
+    this.selectedCategoryId = categoryId;
+    this.currentPage = 0;
+    this.keyword = '';
+    this.getProducts('', categoryId, 0, this.itemsPerPage);
+  }
 
   constructor(
     private productService: ProductService,
@@ -84,8 +97,8 @@ export class HomeComponent implements OnInit {
         next: (apiresponse: ApiResponse) => {
           debugger;
           const response = apiresponse.data;
-          response.products.forEach((product: Product) => {          
-            product.url = `${environment.apiBaseUrl}/products/images/${product.thumbnail}`;
+          response.products.forEach((product: Product) => {
+            product.url = resolveImageUrl(product.thumbnail);
           });
           this.products = response.products;
           this.totalPages = response.totalPages;

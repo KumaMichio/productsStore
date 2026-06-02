@@ -1,0 +1,29 @@
+# Secrets — NEVER commit these
+.env
+*.env.local
+
+# Uploads (binary files managed at runtime)
+backend/uploads/
+uploads/
+
+# Build artifacts
+backend/target/
+frontend/dist/
+frontend/.angular/
+
+# IDE
+.vscode/settings.json
+*.iml
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# SSL certs (managed by certbot at runtime)
+nginx/ssl/
+nginx/certbot/
