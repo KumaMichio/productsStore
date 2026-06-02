@@ -119,6 +119,8 @@ Located in `src/main/resources/dev/db/migration/`:
 | V3 | Add refresh token support |
 | V4 | Create comments table |
 | V5 | Create coupon table |
+| V6 | Create favorites table |
+| V7 | Create contact_messages + newsletter_subscribers tables |
 
 If Flyway reports a failed migration on startup, repair with:
 
@@ -126,8 +128,22 @@ If Flyway reports a failed migration on startup, repair with:
 DELETE FROM flyway_schema_history WHERE success = 0;
 ```
 
+## Selected public endpoints
+
+These do not require authentication (whitelisted in `WebSecurityConfig`):
+
+| Method | Path | Body | Purpose |
+|---|---|---|---|
+| POST | `/api/v1/users/register` | UserDTO | Register account |
+| POST | `/api/v1/users/login` | LoginDTO | Login, returns JWT |
+| GET | `/api/v1/products/**` | — | Browse products (supports `?keyword=&category_id=&page=&limit=`) |
+| GET | `/api/v1/categories/**` | — | List categories |
+| POST | `/api/v1/contacts` | `{name,email,subject?,message}` | Submit a contact message (stored in `contact_messages`) |
+| POST | `/api/v1/newsletter/subscribe` | `{email}` | Subscribe to newsletter (stored in `newsletter_subscribers`, idempotent by email) |
+
 ## Notes
 
+- **Public endpoints must be whitelisted in TWO places**: `WebSecurityConfig` (`permitAll`) **and** `JwtTokenFilter.isBypassToken()` (path + HTTP method pair). Missing the filter entry returns `401` even though the path is `permitAll`.
 - Redis caching is optional and toggled via `spring.data.redis.use-redis-cache`
 - Kafka consumer/producer warnings on startup are non-fatal if Kafka is unreachable
-- The `uploads/` directory inside the container stores product images
+- The `uploads/` directory inside the container stores product images. In `deployment.yaml` it is bind-mounted from `./backend/uploads` so images survive container rebuilds.
