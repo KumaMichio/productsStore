@@ -67,8 +67,8 @@ spring:
 api:
   prefix: /api/v1
 
-# Cloudinary image storage (leave blank to use local disk)
-CLOUDINARY_URL: ${CLOUDINARY_URL:}
+# Cloudinary image storage: set the CLOUDINARY_URL env var to enable;
+# leave it unset to fall back to local disk (see CloudinaryConfig).
 
 # CORS allowed origins (comma-separated)
 allowed:

@@ -156,9 +156,9 @@ public class ProductService implements IProductService{
                     "Number of images must be <= "
                     +ProductImage.MAXIMUM_IMAGES_PER_PRODUCT);
         }
-        if (existingProduct.getThumbnail() == null ) {
-            existingProduct.setThumbnail(newProductImage.getImageUrl());
-        }
+        // Cập nhật thumbnail sang ảnh vừa upload (ảnh mới nhất làm thumbnail),
+        // để danh sách sản phẩm / shop phản ánh đúng ảnh đã thay đổi.
+        existingProduct.setThumbnail(newProductImage.getImageUrl());
         productRepository.save(existingProduct);
         return productImageRepository.save(newProductImage);
     }
