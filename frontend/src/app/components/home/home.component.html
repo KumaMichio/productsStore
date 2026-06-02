@@ -95,7 +95,7 @@
     <div class="journal-card">
       <span class="section-label">JOURNAL · NO. 12</span>
       <h3 class="journal-title">On the slow practice of choosing fewer, better things.</h3>
-      <a class="read-link">Read the essay ↗</a>
+      <a class="read-link" routerLink="/page/blog">Read the essay ↗</a>
     </div>
 
     <!-- Linen tote + Newsletter pair -->
@@ -117,8 +117,9 @@
         <h3 class="letter-title">A monthly note from the studio.</h3>
         <div class="newsletter-form">
           <input type="email" [(ngModel)]="newsletterEmail"
+            (keyup.enter)="subscribeNewsletter()"
             placeholder="you@email.com" class="newsletter-input">
-          <button class="newsletter-btn">Join</button>
+          <button class="newsletter-btn" (click)="subscribeNewsletter()">Join</button>
         </div>
       </div>
     </div>

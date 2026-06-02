@@ -6,6 +6,8 @@ import { DetailProductComponent } from './components/detail-product/detail-produ
 import { OrderComponent } from './components/order/order.component';
 import { OrderDetailComponent } from './components/detail-order/order.detail.component';
 import { UserProfileComponent } from './components/user-profile/user.profile.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { InfoPageComponent } from './components/info-page/info-page.component';
 import { AuthGuardFn } from './guards/auth.guard';
 import { AdminGuardFn } from './guards/admin.guard';
 import { adminRoutes } from './components/admin/admin-routes';
@@ -15,6 +17,8 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'products/:id', component: DetailProductComponent },
+  { path: 'contact', component: ContactComponent },
+  { path: 'page/:slug', component: InfoPageComponent },
   { path: 'orders', component: OrderComponent, canActivate: [AuthGuardFn] },
   { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuardFn] },
   { path: 'orders/:id', component: OrderDetailComponent },

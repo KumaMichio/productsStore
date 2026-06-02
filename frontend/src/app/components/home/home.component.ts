@@ -1,11 +1,13 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { Product } from '../../models/product';
 import { Category } from '../../models/category';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { CategoryService } from '../../services/category.service';
 import { ProductService } from '../../services/product.service';
 import { TokenService } from '../../services/token.service';
+import { NewsletterService } from '../../services/newsletter.service';
+import { ToastService } from '../../services/toast.service';
 import { ApiResponse } from '../../responses/api.response';
 
 import { HeaderComponent } from '../header/header.component';
@@ -24,7 +26,8 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
     FooterComponent,
     HeaderComponent,
     CommonModule,
-    FormsModule
+    FormsModule,
+    RouterModule
   ]
 })
 export class HomeComponent implements OnInit {
@@ -54,31 +57,57 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private categoryService: CategoryService,    
+    private categoryService: CategoryService,
     private router: Router,
+    private activatedRoute: ActivatedRoute,
     private tokenService: TokenService,
+    private newsletterService: NewsletterService,
+    private toastService: ToastService,
     @Inject(DOCUMENT) private document: Document
     ) {
       this.localStorage = document.defaultView?.localStorage;
     }
 
+    subscribeNewsletter(): void {
+      const email = this.newsletterEmail.trim();
+      const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailPattern.test(email)) {
+        this.toastService.error('Vui lòng nhập email hợp lệ.');
+        return;
+      }
+      this.newsletterService.subscribe(email).subscribe({
+        next: (apiResponse: ApiResponse) => {
+          this.toastService.success(apiResponse?.message ?? 'Đăng ký nhận tin thành công');
+          this.newsletterEmail = '';
+        },
+        error: (error: HttpErrorResponse) => {
+          this.toastService.error(error?.error?.message ?? 'Đăng ký thất bại.');
+        },
+      });
+    }
+
     ngOnInit() {
-      this.currentPage = Number(this.localStorage?.getItem('currentProductPage')) || 0; 
-      this.getProducts(this.keyword, this.selectedCategoryId, this.currentPage, this.itemsPerPage);
       this.getCategories(0, 100);
+      // Lắng nghe query param `search` (header) và `category` (footer SHOP) để lọc sản phẩm.
+      this.activatedRoute.queryParamMap.subscribe((params) => {
+        this.keyword = params.get('search') ?? '';
+        this.selectedCategoryId = Number(params.get('category')) || 0;
+        const hasFilter = !!this.keyword || this.selectedCategoryId > 0;
+        this.currentPage = hasFilter
+          ? 0
+          : (Number(this.localStorage?.getItem('currentProductPage')) || 0);
+        this.getProducts(this.keyword, this.selectedCategoryId, this.currentPage, this.itemsPerPage);
+      });
     }
     
     getCategories(page: number, limit: number) {
       this.categoryService.getCategories(page, limit).subscribe({
         next: (apiResponse: ApiResponse) => {
-          debugger;
           this.categories = apiResponse.data;
         },
         complete: () => {
-          debugger;
         },
         error: (error: HttpErrorResponse) => {
-          debugger;
           console.error(error?.error?.message ?? '');
         } 
       });
@@ -87,15 +116,12 @@ export class HomeComponent implements OnInit {
     searchProducts() {
       this.currentPage = 0;
       this.itemsPerPage = 12;
-      debugger;
       this.getProducts(this.keyword, this.selectedCategoryId, this.currentPage, this.itemsPerPage);
     }
     
     getProducts(keyword: string, selectedCategoryId: number, page: number, limit: number) {
-      debugger;
       this.productService.getProducts(keyword, selectedCategoryId, page, limit).subscribe({
         next: (apiresponse: ApiResponse) => {
-          debugger;
           const response = apiresponse.data;
           response.products.forEach((product: Product) => {
             product.url = resolveImageUrl(product.thumbnail);
@@ -105,17 +131,14 @@ export class HomeComponent implements OnInit {
           this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
         },
         complete: () => {
-          debugger;
         },
         error: (error: HttpErrorResponse) => {
-          debugger;
           console.error(error?.error?.message ?? '');
         }
       });    
     }
     
     onPageChange(page: number) {
-      debugger;
       this.currentPage = page < 0 ? 0 : page;
       this.localStorage?.setItem('currentProductPage', String(this.currentPage)); 
       this.getProducts(this.keyword, this.selectedCategoryId, this.currentPage, this.itemsPerPage);
@@ -138,7 +161,6 @@ export class HomeComponent implements OnInit {
     
     // Hàm xử lý sự kiện khi sản phẩm được bấm vào
     onProductClick(productId: number) {
-      debugger;
       // Điều hướng đến trang detail-product với productId là tham số
       this.router.navigate(['/products', productId]);
     }

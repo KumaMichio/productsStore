@@ -1,0 +1,63 @@
+@import '../../styles/shared-styles.scss';
+
+.info-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 4rem 2rem 5rem;
+}
+
+.info-head {
+  margin-bottom: 2.5rem;
+}
+
+.info-title {
+  font-family: $font-serif;
+  font-size: 2.5rem;
+  font-weight: 500;
+  color: $color-text;
+  margin: 0 0 0.75rem;
+}
+
+.info-intro {
+  font-family: $font-sans;
+  font-size: 1.05rem;
+  color: $color-muted;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.info-section {
+  margin-bottom: 2rem;
+}
+
+.info-section-heading {
+  font-family: $font-serif;
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: $color-text;
+  margin: 0 0 0.6rem;
+}
+
+.info-para {
+  font-family: $font-sans;
+  font-size: 0.95rem;
+  color: $color-text;
+  line-height: 1.7;
+  margin: 0 0 0.6rem;
+}
+
+.info-notfound {
+  text-align: center;
+  padding: 3rem 0;
+
+  h1 { font-family: $font-serif; color: $color-text; }
+  p { color: $color-muted; }
+}
+
+.info-back {
+  display: inline-block;
+  margin-top: 1rem;
+  color: $color-accent;
+  font-family: $font-sans;
+  font-size: 0.9rem;
+}

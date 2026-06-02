@@ -1,0 +1,14 @@
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL,
+  subject VARCHAR(200),
+  message VARCHAR(2000) NOT NULL,
+  created_at DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS newsletter_subscribers (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  created_at DATETIME
+);

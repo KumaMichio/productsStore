@@ -72,6 +72,47 @@
   letter-spacing: 0.04em;
 }
 
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.search-input {
+  width: 180px;
+  padding: 0.35rem 0.6rem;
+  border: 1px solid $color-border;
+  border-radius: 4px;
+  background-color: $color-white;
+  color: $color-text;
+  font-family: $font-sans;
+  font-size: 0.8rem;
+  outline: none;
+
+  &:focus { border-color: $color-accent; }
+  &::placeholder { color: $color-muted; }
+}
+
+.cart-btn { position: relative; }
+
+.cart-badge {
+  position: absolute;
+  top: -4px;
+  right: -6px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background-color: $color-accent;
+  color: $color-white;
+  font-family: $font-sans;
+  font-size: 0.65rem;
+  font-weight: 600;
+  line-height: 17px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
 .user-menu-wrapper { position: relative; }
 
 .popover-list {
