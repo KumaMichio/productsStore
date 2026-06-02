@@ -34,45 +34,36 @@ export class CategoryAdminComponent implements OnInit {
     getCategories(page: number, limit: number) {
       this.categoryService.getCategories(page, limit).subscribe({
         next: (apiResponse: ApiResponse) => {
-          debugger;
           this.categories = apiResponse.data;
         },
         complete: () => {
-          debugger;
         },
         error: (error: HttpErrorResponse) => {
-          debugger;
           console.error(error?.error?.message ?? '');
         }
       });
     }
     insertCategory() {
-      debugger
       // Điều hướng đến trang detail-category với categoryId là tham số
       this.router.navigate(['/admin/categories/insert']);
     } 
 
     // Hàm xử lý sự kiện khi sản phẩm được bấm vào
     updateCategory(categoryId: number) {
-      debugger      
       this.router.navigate(['/admin/categories/update', categoryId]);
     }  
     deleteCategory(category: Category) {      
       const confirmation = window
       .confirm('Are you sure you want to delete this category?');
       if (confirmation) {
-        debugger
         this.categoryService.deleteCategory(category.id).subscribe({
           next: (apiResponse: ApiResponse) => {
-            debugger 
             console.error('Xóa thành công')
             location.reload();          
           },
           complete: () => {
-            debugger;          
           },
           error: (error: HttpErrorResponse) => {
-            debugger;
             console.error(error?.error?.message ?? '');
           }          
         });  

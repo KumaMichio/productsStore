@@ -20,7 +20,6 @@ export class AuthGuard {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const isTokenExpired = this.tokenService.isTokenExpired();
     const isUserIdValid = this.tokenService.getUserId() > 0;
-    debugger
     if (!isTokenExpired && isUserIdValid) {
       return true;
     } else {
@@ -34,6 +33,5 @@ export class AuthGuard {
 
 // Sử dụng functional guard như sau:
 export const AuthGuardFn: CanActivateFn = (next: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean => {
-  debugger
   return inject(AuthGuard).canActivate(next, state);
 }

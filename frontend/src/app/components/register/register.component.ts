@@ -35,7 +35,6 @@ export class RegisterComponent {
   showPassword: boolean = false;
 
   constructor(private router: Router, private userService: UserService){
-    debugger
     this.phoneNumber = '';
     this.password = '';
     this.retypePassword = '';
@@ -60,7 +59,6 @@ export class RegisterComponent {
                     `isAccepted: ${this.isAccepted}`+
                     `dateOfBirth: ${this.dateOfBirth}`;
     //console.error(message);
-    debugger
     
     const registerDTO:RegisterDTO = {
         "fullname": this.fullName,
@@ -75,7 +73,6 @@ export class RegisterComponent {
     }
     this.userService.register(registerDTO).subscribe({
         next: (apiResponse: ApiResponse) => {
-          debugger
           const confirmation = window
             .confirm('Đăng ký thành công, mời bạn đăng nhập. Bấm "OK" để chuyển đến trang đăng nhập.');
           if (confirmation) {
@@ -83,10 +80,8 @@ export class RegisterComponent {
           }
         },
         complete: () => {
-          debugger
         },
         error: (error: HttpErrorResponse) => {
-          debugger;
           console.error(error?.error?.message ?? '');
         } 
     })   

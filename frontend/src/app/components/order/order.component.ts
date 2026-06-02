@@ -78,26 +78,21 @@ export class OrderComponent implements OnInit{
   }
   
   ngOnInit(): void {  
-    debugger
     //this.cartService.clearCart();
     this.orderData.user_id = this.tokenService.getUserId();    
     // Lấy danh sách sản phẩm từ giỏ hàng
-    debugger
     this.cart = this.cartService.getCart();
     const productIds = Array.from(this.cart.keys()); // Chuyển danh sách ID từ Map giỏ hàng    
 
     // Gọi service để lấy thông tin sản phẩm dựa trên danh sách ID
-    debugger    
     if(productIds.length === 0) {
       return;
     }    
     this.productService.getProductsByIds(productIds).subscribe({
       next: (apiResponse: ApiResponse) => {            
-        debugger
         const products: Product[] = apiResponse.data
         // Lấy thông tin sản phẩm và số lượng từ danh sách sản phẩm và giỏ hàng
         this.cartItems = productIds.map((productId) => {
-          debugger
           const product = products.find((p) => p.id === productId);
           if (product) {
             product.thumbnail = `${environment.apiBaseUrl}/products/images/${product.thumbnail}`;
@@ -110,17 +105,14 @@ export class OrderComponent implements OnInit{
         console.log('haha');
       },
       complete: () => {
-        debugger;
         this.calculateTotal()
       },
       error: (error: HttpErrorResponse) => {
-        debugger;
         console.error(error?.error?.message ?? '');
       }
     });        
   }
   placeOrder() {
-    debugger
     if (this.orderForm.errors == null) {
       // Gán giá trị từ form vào đối tượng orderData
       /*
@@ -145,17 +137,14 @@ export class OrderComponent implements OnInit{
       // Dữ liệu hợp lệ, bạn có thể gửi đơn hàng đi
       this.orderService.placeOrder(this.orderData).subscribe({
         next: (response: ApiResponse) => {
-          debugger;          
           console.error('Đặt hàng thành công');
           this.cartService.clearCart();
           this.router.navigate(['/']);
         },
         complete: () => {
-          debugger;
           this.calculateTotal();
         },
         error: (error: HttpErrorResponse) => {
-          debugger;
           console.error(`Lỗi khi đặt hàng: ${error?.error?.message ?? ''}`);
         },
       });
@@ -200,7 +189,6 @@ export class OrderComponent implements OnInit{
   }
   // Hàm xử lý việc áp dụng mã giảm giá
   applyCoupon(): void {
-    debugger
     const couponCode = this.orderForm.get('couponCode')!.value;
     if (!this.couponApplied && couponCode) {
       this.calculateTotal();

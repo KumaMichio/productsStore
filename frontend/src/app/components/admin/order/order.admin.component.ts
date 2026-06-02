@@ -64,7 +64,6 @@ export class OrderAdminComponent implements OnInit{
     this.localStorage = document.defaultView?.localStorage;
   }
   ngOnInit(): void {
-    debugger
     this.currentPage = Number(this.localStorage?.getItem('currentOrderAdminPage')) || 0; 
     this.getAllOrders(this.keyword, this.currentPage, this.itemsPerPage);
   }
@@ -72,29 +71,23 @@ export class OrderAdminComponent implements OnInit{
     this.currentPage = 0;
     this.itemsPerPage = 12;
     //Mediocre Iron Wallet
-    debugger
     this.getAllOrders(this.keyword.trim(), this.currentPage, this.itemsPerPage);
   }
   getAllOrders(keyword: string, page: number, limit: number) {
-    debugger
     this.orderService.getAllOrders(keyword, page, limit).subscribe({
       next: (apiResponse: ApiResponse) => {
-        debugger        
         this.orders = apiResponse.data.orders;
         this.totalPages = apiResponse.data.totalPages;
         this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
       },
       complete: () => {
-        debugger;
       },
       error: (error: HttpErrorResponse) => {
-        debugger;
         console.error(error?.error?.message ?? '');
       }
     });    
   }
   onPageChange(page: number) {
-    debugger;
     this.currentPage = page < 0 ? 0 : page;
     this.localStorage?.setItem('currentOrderAdminPage', String(this.currentPage));         
     this.getAllOrders(this.keyword, this.currentPage, this.itemsPerPage);
@@ -121,24 +114,19 @@ export class OrderAdminComponent implements OnInit{
     const confirmation = window
       .confirm('Are you sure you want to delete this order?');
     if (confirmation) {
-      debugger
       this.orderService.deleteOrder(id).subscribe({
         next: (response: ApiResponse) => {
-          debugger 
           location.reload();          
         },
         complete: () => {
-          debugger;          
         },
         error: (error: HttpErrorResponse) => {
-          debugger;
           console.error(error?.error?.message ?? '');
         }
       });    
     }
   }
   viewDetails(order:OrderResponse) {
-    debugger
     this.router.navigate(['/admin/orders', order.id]);
   }
   

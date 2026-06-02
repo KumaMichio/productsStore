@@ -55,7 +55,6 @@ export class UserAdminComponent implements OnInit{
   getUsers(keyword: string, page: number, limit: number) {
     this.userService.getUsers({ keyword, page, limit }).subscribe({      
       next: (apiResponse: ApiResponse) => {        
-        debugger
         const response = apiResponse.data
         this.users = response.users;
         this.totalPages = response.totalPages;
@@ -63,10 +62,8 @@ export class UserAdminComponent implements OnInit{
       },
       complete: () => {
         // Handle complete event
-        debugger
       },
       error: (error: HttpErrorResponse) => {
-        debugger;
         console.error(error?.error?.message ?? '');
       } 
     });
@@ -95,14 +92,12 @@ export class UserAdminComponent implements OnInit{
     
     // Hàm xử lý sự kiện khi thêm mới sản phẩm
     insertUser() {
-      debugger
       // Điều hướng đến trang detail-user với userId là tham số
       this.router.navigate(['/admin/users/insert']);
     } 
 
     // Hàm xử lý sự kiện khi sản phẩm được bấm vào
     updateUser(userId: number) {
-      debugger
       // Điều hướng đến trang detail-user với userId là tham số
       this.router.navigate(['/admin/users/update', userId]);
     }  
@@ -116,7 +111,6 @@ export class UserAdminComponent implements OnInit{
           // Handle complete event
         },
         error: (error: HttpErrorResponse) => {
-          debugger;
           console.error(error?.error?.message ?? '');
         } 
       });
@@ -149,7 +143,6 @@ export class UserAdminComponent implements OnInit{
             // Handle complete event
           },
           error: (error: HttpErrorResponse) => {
-            debugger;
             console.error(error?.error?.message ?? '');
           } 
         });
