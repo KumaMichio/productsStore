@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Product } from '../../models/product';
 import { ProductService } from '../../services/product.service';
 import { CartService } from '../../services/cart.service';
+import { ToastService } from '../../services/toast.service';
 import { environment } from '../../../environments/environment';
 import { ProductImage } from '../../models/product.image';
 import { HeaderComponent } from '../header/header.component';
@@ -49,17 +50,17 @@ export class DetailProductComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
+    private toastService: ToastService,
     // private categoryService: CategoryService,
     // private router: Router,
       private activatedRoute: ActivatedRoute,
       private router: Router,
     ) {
-      
+
     }
     ngOnInit() {
       // Lấy productId từ URL      
       const idParam = this.activatedRoute.snapshot.paramMap.get('id');
-      debugger
       //this.cartService.clearCart();
       //const idParam = 9 //fake tạm 1 giá trị
       if (idParam !== null) {
@@ -70,22 +71,18 @@ export class DetailProductComponent implements OnInit {
           next: (apiResponse: ApiResponse) => {            
             // Lấy danh sách ảnh sản phẩm và thay đổi URL
             const response = apiResponse.data
-            debugger
             if (response.product_images && response.product_images.length > 0) {
               response.product_images.forEach((product_image: ProductImage) => {
                 product_image.image_url = resolveImageUrl(product_image.image_url);
               });
             }            
-            debugger
             this.product = response;
             this.showImage(0);
             this.loadRelatedProducts(response.category_id);
           },
           complete: () => {
-            debugger;
           },
           error: (error: HttpErrorResponse) => {
-            debugger;
             console.error(error?.error?.message ?? '');
           }
         });    
@@ -109,7 +106,6 @@ export class DetailProductComponent implements OnInit {
     }
 
     showImage(index: number): void {
-      debugger
       if (this.product && this.product.product_images && 
           this.product.product_images.length > 0) {
         // Đảm bảo index nằm trong khoảng hợp lệ        
@@ -123,32 +119,29 @@ export class DetailProductComponent implements OnInit {
       }
     }
     thumbnailClick(index: number) {
-      debugger
       // Gọi khi một thumbnail được bấm
       this.currentImageIndex = index; // Cập nhật currentImageIndex
     }  
     nextImage(): void {
-      debugger
       this.showImage(this.currentImageIndex + 1);
     }
   
     previousImage(): void {
-      debugger
       this.showImage(this.currentImageIndex - 1);
     }      
     addToCart(): void {
-      debugger
       this.isPressedAddToCart = true;
       if (this.product) {
         this.cartService.addToCart(this.product.id, this.quantity);
+        this.toastService.success(`Đã thêm "${this.product.name}" vào giỏ hàng`);
       } else {
         // Xử lý khi product là null
+        this.toastService.error('Không thể thêm sản phẩm vào giỏ hàng.');
         console.error('Không thể thêm sản phẩm vào giỏ hàng vì product là null.');
       }
-    }    
+    }
         
     increaseQuantity(): void {
-      debugger
       this.quantity++;
     }
     

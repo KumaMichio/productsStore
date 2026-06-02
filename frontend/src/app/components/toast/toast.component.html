@@ -1,0 +1,13 @@
+<div class="toast-container">
+  @for (toast of toasts; track toast.id) {
+    <div class="toast-item" [ngClass]="toast.type">
+      <span class="toast-icon">
+        @if (toast.type === 'success') { ✓ }
+        @else if (toast.type === 'error') { ✕ }
+        @else { i }
+      </span>
+      <span class="toast-text">{{ toast.text }}</span>
+      <button class="toast-close" (click)="dismiss(toast.id)" aria-label="Close">×</button>
+    </div>
+  }
+</div>

@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 
 import { Location } from '@angular/common';
-import { environment } from '../../../../environments/environment';
+import { resolveImageUrl } from '../../../utils/image.util';
 import { Product } from '../../../models/product';
 import { ProductService } from '../../../services/product.service';
 import { CommonModule } from '@angular/common';
@@ -54,19 +54,16 @@ export class ProductAdminComponent implements OnInit {
       this.currentPage = 0;
       this.itemsPerPage = 12;
       //Mediocre Iron Wallet
-      debugger
       this.getProducts(this.keyword.trim(), this.selectedCategoryId, this.currentPage, this.itemsPerPage);
     }
     getProducts(keyword: string, selectedCategoryId: number, page: number, limit: number) {
-      debugger
       this.productService.getProducts(keyword, selectedCategoryId, page, limit).subscribe({
         next: (apiResponse: ApiResponse) => {
-          debugger
           const response = apiResponse?.data;
           const products: Product[] = response.products ?? [];
           products.forEach((product: Product) => {
             if (product) {
-              product.url = `${environment.apiBaseUrl}/products/images/${product.thumbnail}`;
+              product.url = resolveImageUrl(product.thumbnail);
             }
           });
           this.products = products;
@@ -74,16 +71,13 @@ export class ProductAdminComponent implements OnInit {
           this.visiblePages = this.generateVisiblePageArray(this.currentPage, this.totalPages);
         },
         complete: () => {
-          debugger;
         },
         error: (error: HttpErrorResponse) => {
-          debugger;
           console.error(error?.error?.message ?? '');
         }
       });    
     }
     onPageChange(page: number) {
-      debugger;
       this.currentPage = page < 0 ? 0 : page;
       this.localStorage?.setItem('currentProductAdminPage', String(this.currentPage));     
       this.getProducts(this.keyword, this.selectedCategoryId, this.currentPage, this.itemsPerPage);
@@ -106,14 +100,12 @@ export class ProductAdminComponent implements OnInit {
     
     // Hàm xử lý sự kiện khi thêm mới sản phẩm
     insertProduct() {
-      debugger
       // Điều hướng đến trang detail-product với productId là tham số
       this.router.navigate(['/admin/products/insert']);
     } 
 
     // Hàm xử lý sự kiện khi sản phẩm được bấm vào
     updateProduct(productId: number) {
-      debugger
       // Điều hướng đến trang detail-product với productId là tham số
       this.router.navigate(['/admin/products/update', productId]);
     }  
@@ -121,18 +113,14 @@ export class ProductAdminComponent implements OnInit {
       const confirmation = window
       .confirm('Are you sure you want to delete this product?');
       if (confirmation) {
-        debugger
         this.productService.deleteProduct(product.id).subscribe({
           next: (apiResponse: ApiResponse) => {
-            debugger 
             console.error('Xóa thành công')
             location.reload();          
           },
           complete: () => {
-            debugger;          
           },
           error: (error: HttpErrorResponse) => {
-            debugger;
             console.error(error?.error?.message ?? '');
           }
         });  
