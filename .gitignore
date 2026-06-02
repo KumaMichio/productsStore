@@ -20,6 +20,12 @@ frontend/.angular/
 .DS_Store
 Thumbs.db
 
+# Runtime data
+redis-data/
+
+# Local agent config
+.claude/
+
 # Logs
 *.log
 logs/
