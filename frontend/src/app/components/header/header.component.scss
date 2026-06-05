@@ -95,6 +95,68 @@
 
 .cart-btn { position: relative; }
 
+// ── Language switcher ─────────────────────────────────────
+.lang-wrap {
+  position: relative;
+}
+
+.lang-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s;
+
+  &:hover { background: $color-bg-alt; }
+}
+
+.lang-flag { font-size: 1rem; line-height: 1; }
+
+.lang-code {
+  font-family: $font-sans;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: $color-text;
+  letter-spacing: 0.04em;
+}
+
+.lang-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: $color-white;
+  border: 1px solid $color-border;
+  border-radius: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  overflow: hidden;
+  min-width: 148px;
+  z-index: 200;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 14px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: $font-sans;
+  font-size: 0.82rem;
+  color: $color-text;
+  text-align: left;
+  transition: background 0.12s;
+
+  &:hover { background: $color-bg-alt; }
+
+  &.active {
+    font-weight: 600;
+    color: $color-accent;
+  }
+}
+
 .cart-badge {
   position: absolute;
   top: -4px;

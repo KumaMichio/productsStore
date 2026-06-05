@@ -1,12 +1,12 @@
 @import '../../styles/shared-styles.scss';
 
-$gap: 6px;
-$max-w: 1200px;
-$pad: 0 2rem;
+$gap: 14px;
+$max-w: 1360px;
+$pad: 0 2.5rem;
 
 // ── Hero ─────────────────────────────────────────────────────
 .hero {
-  padding: 5rem 2rem 3.5rem;
+  padding: 7rem 2.5rem 5rem;
   max-width: $max-w;
   margin: 0 auto;
 }
@@ -22,7 +22,7 @@ $pad: 0 2rem;
 
 .hero-title {
   font-family: $font-serif;
-  font-size: clamp(2.6rem, 6vw, 5rem);
+  font-size: clamp(3rem, 6.5vw, 6.5rem);
   font-weight: 300;
   line-height: 1.08;
   color: $color-text;
@@ -52,7 +52,7 @@ $pad: 0 2rem;
 .bento-outer {
   display: flex;
   gap: $gap;
-  height: clamp(380px, 44vw, 560px);
+  height: clamp(480px, 52vw, 720px);
 
   @media (max-width: 768px) {
     flex-direction: column;
@@ -62,11 +62,12 @@ $pad: 0 2rem;
 
 // Left hero card — fixed half width, full height of outer
 .bento-hero {
-  flex: 0 0 calc(50% - #{$gap / 2});
+  flex: 0 0 calc(50% - #{$gap * 0.5});
   position: relative;
   overflow: hidden;
   cursor: pointer;
   background: $color-bg-alt;
+  border-radius: 12px;
 
   &:hover .bento-img { transform: scale(1.03); }
 
@@ -146,6 +147,7 @@ $pad: 0 2rem;
   flex: 1;
   min-height: 0;
   min-width: 0;
+  border-radius: 12px;
 
   &:hover .bento-img { transform: scale(1.03); }
 }
@@ -160,15 +162,18 @@ $pad: 0 2rem;
 
 .bento-card-info {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(255, 255, 255, 0.93);
-  padding: 9px 12px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 7px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 8px;
+  border-radius: 8px;
 }
 
 .card-meta {
@@ -180,7 +185,7 @@ $pad: 0 2rem;
 
 .card-name {
   font-family: $font-sans;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: $color-text;
   white-space: nowrap;
@@ -190,13 +195,13 @@ $pad: 0 2rem;
 
 .card-cat {
   font-family: $font-sans;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   color: $color-muted;
 }
 
 .card-price {
   font-family: $font-sans;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: $color-text;
   white-space: nowrap;
@@ -220,11 +225,12 @@ $pad: 0 2rem;
 
 .journal-card {
   background: $color-bg-alt;
-  padding: 36px 40px;
+  padding: 48px 52px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  min-height: 260px;
+  min-height: 320px;
+  border-radius: 12px;
 }
 
 .section-label {
@@ -260,7 +266,7 @@ $pad: 0 2rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: $gap;
-  min-height: 260px;
+  min-height: 320px;
 
   @media (max-width: 480px) { grid-template-columns: 1fr; }
 }
@@ -275,6 +281,7 @@ $pad: 0 2rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  border-radius: 12px;
 }
 
 .letter-label { color: rgba(255, 255, 255, 0.55); }
@@ -359,7 +366,7 @@ $pad: 0 2rem;
 .categories-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 14px;
 
   @media (max-width: 680px) { grid-template-columns: repeat(2, 1fr); }
 }
@@ -368,8 +375,9 @@ $pad: 0 2rem;
   position: relative;
   overflow: hidden;
   cursor: pointer;
-  aspect-ratio: 3/4;
+  aspect-ratio: 2/3;
   background: $color-bg-alt;
+  border-radius: 12px;
 
   &:hover .cat-img { transform: scale(1.04); }
 }
@@ -460,7 +468,7 @@ $pad: 0 2rem;
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 2rem 1.5rem;
+  gap: 2.5rem 2rem;
 
   @media (max-width: 1024px) { grid-template-columns: repeat(3, 1fr); }
   @media (max-width: 768px)  { grid-template-columns: repeat(2, 1fr); }
@@ -476,8 +484,9 @@ $pad: 0 2rem;
 .product-img-wrap {
   overflow: hidden;
   background-color: $color-bg-alt;
-  aspect-ratio: 3/4;
-  margin-bottom: 0.9rem;
+  aspect-ratio: 2/3;
+  margin-bottom: 1rem;
+  border-radius: 12px;
 }
 
 .product-img {
@@ -502,6 +511,37 @@ $pad: 0 2rem;
   font-size: 0.85rem;
   color: $color-muted;
   margin: 0;
+}
+
+// ── Shop mode ────────────────────────────────────────────────
+.shop-section {
+  max-width: $max-w;
+  margin: 0 auto;
+  padding: 3rem 2rem 0;
+}
+
+.shop-header {
+  margin-bottom: 2rem;
+}
+
+.back-home {
+  font-family: $font-sans;
+  font-size: 0.82rem;
+  color: $color-muted;
+  cursor: pointer;
+  display: inline-block;
+  margin-bottom: 1.25rem;
+  transition: color 0.15s;
+
+  &:hover { color: $color-text; }
+}
+
+.shop-title {
+  font-family: $font-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  color: $color-text;
+  margin: 0 0 1.5rem;
 }
 
 // Pagination

@@ -13,6 +13,7 @@ import { HeaderComponent } from '../header/header.component';
 import { CommonModule } from '@angular/common';
 import { ApiResponse } from '../../responses/api.response';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order-detail',
@@ -22,7 +23,8 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
   imports: [
     FooterComponent,
     HeaderComponent,
-    CommonModule
+    CommonModule,
+    TranslateModule
   ]
 })
 export class OrderDetailComponent implements OnInit {  
@@ -53,7 +55,7 @@ export class OrderDetailComponent implements OnInit {
   }
   
   getOrderDetails(): void {
-    const orderId = Number(this.route.snapshot.paramMap.get('orderId'));
+    const orderId = Number(this.route.snapshot.paramMap.get('id'));
     this.orderService.getOrderById(orderId).subscribe({
       next: (apiResponse: ApiResponse) => {        
         const response = apiResponse.data    
@@ -76,11 +78,9 @@ export class OrderDetailComponent implements OnInit {
           return order_detail;
         });        
         this.orderResponse.payment_method = response.payment_method;
-        this.orderResponse.shipping_date = new Date(
-          response.shipping_date[0], 
-          response.shipping_date[1] - 1, 
-          response.shipping_date[2]
-        );
+        this.orderResponse.shipping_date = response.shipping_date
+          ? new Date(response.shipping_date[0], response.shipping_date[1] - 1, response.shipping_date[2])
+          : new Date();
         
         this.orderResponse.shipping_method = response.shipping_method;
         

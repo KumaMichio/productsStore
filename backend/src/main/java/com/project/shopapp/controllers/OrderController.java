@@ -54,10 +54,12 @@ public class OrderController {
                         .status(HttpStatus.OK)
                         .build());
     }
-    @GetMapping("/user/{user_id}") // Thêm biến đường dẫn "user_id"
-    //GET http://localhost:8088/api/v1/orders/user/4
+    @GetMapping("/user/{user_id}")
     public ResponseEntity<ResponseObject> getOrders(@Valid @PathVariable("user_id") Long userId) {
-        List<Order> orders = orderService.findByUserId(userId);
+        List<OrderResponse> orders = orderService.findByUserId(userId)
+                .stream()
+                .map(OrderResponse::fromOrder)
+                .toList();
         return ResponseEntity.ok(ResponseObject
                         .builder()
                         .message("Get list of orders successfully")

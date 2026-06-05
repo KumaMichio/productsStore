@@ -16,6 +16,8 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { resolveImageUrl } from '../../utils/image.util';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { FadeInDirective } from '../../directives/fade-in.directive';
 
 @Component({
   selector: 'app-home',
@@ -27,13 +29,17 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
     HeaderComponent,
     CommonModule,
     FormsModule,
-    RouterModule
+    RouterModule,
+    TranslateModule,
+    FadeInDirective
   ]
 })
 export class HomeComponent implements OnInit {
   products: Product[] = [];
+  categoryRepresentatives: Product[] = [];
   categories: Category[] = [];
   selectedCategoryId: number = 0;
+  viewAll: boolean = false;
   currentPage: number = 0;
   itemsPerPage: number = 12;
   pages: number[] = [];
@@ -44,15 +50,55 @@ export class HomeComponent implements OnInit {
   localStorage?: Storage;
   apiBaseUrl = environment.apiBaseUrl;
 
+  get isShopMode(): boolean {
+    return this.viewAll || !!this.selectedCategoryId || !!this.keyword;
+  }
+
+  get featuredProducts(): Product[] {
+    const seen = new Set<number>();
+    const result: Product[] = [];
+    for (const p of this.categoryRepresentatives) {
+      if (!seen.has(p.category_id)) { seen.add(p.category_id); result.push(p); }
+      if (result.length >= 6) break;
+    }
+    return result;
+  }
+
+  get shopTitle(): string {
+    if (this.keyword) return `${this.translate.instant('shop.search_results')}: "${this.keyword}"`;
+    if (this.selectedCategoryId) {
+      return this.categories.find(c => c.id === this.selectedCategoryId)?.name ?? this.translate.instant('shop.all_products');
+    }
+    return this.translate.instant('shop.all_products');
+  }
+
   getProductByCategory(categoryId: number): Product | undefined {
-    return this.products.find(p => p.category_id === categoryId);
+    return this.categoryRepresentatives.find(p => p.category_id === categoryId);
+  }
+
+  loadCategoryRepresentatives(): void {
+    this.productService.getProducts('', 0, 0, 100).subscribe({
+      next: (apiResponse: ApiResponse) => {
+        const all: Product[] = apiResponse.data?.products ?? [];
+        all.forEach((p: Product) => { p.url = resolveImageUrl(p.thumbnail); });
+        this.categoryRepresentatives = all;
+      },
+      error: () => {}
+    });
   }
 
   filterByCategory(categoryId: number): void {
-    this.selectedCategoryId = categoryId;
-    this.currentPage = 0;
-    this.keyword = '';
-    this.getProducts('', categoryId, 0, this.itemsPerPage);
+    this.router.navigate([''], {
+      queryParams: categoryId ? { category: categoryId } : { viewAll: '1' }
+    });
+  }
+
+  viewAllProducts(): void {
+    this.router.navigate([''], { queryParams: { viewAll: '1' } });
+  }
+
+  backToHome(): void {
+    this.router.navigate(['']);
   }
 
   constructor(
@@ -63,6 +109,7 @@ export class HomeComponent implements OnInit {
     private tokenService: TokenService,
     private newsletterService: NewsletterService,
     private toastService: ToastService,
+    private translate: TranslateService,
     @Inject(DOCUMENT) private document: Document
     ) {
       this.localStorage = document.defaultView?.localStorage;
@@ -88,15 +135,15 @@ export class HomeComponent implements OnInit {
 
     ngOnInit() {
       this.getCategories(0, 100);
-      // Lắng nghe query param `search` (header) và `category` (footer SHOP) để lọc sản phẩm.
+      this.loadCategoryRepresentatives();
       this.activatedRoute.queryParamMap.subscribe((params) => {
         this.keyword = params.get('search') ?? '';
         this.selectedCategoryId = Number(params.get('category')) || 0;
-        const hasFilter = !!this.keyword || this.selectedCategoryId > 0;
-        this.currentPage = hasFilter
-          ? 0
-          : (Number(this.localStorage?.getItem('currentProductPage')) || 0);
-        this.getProducts(this.keyword, this.selectedCategoryId, this.currentPage, this.itemsPerPage);
+        this.viewAll = params.get('viewAll') === '1';
+        if (this.isShopMode) {
+          this.currentPage = 0;
+          this.getProducts(this.keyword, this.selectedCategoryId, this.currentPage, this.itemsPerPage);
+        }
       });
     }
     
@@ -114,9 +161,7 @@ export class HomeComponent implements OnInit {
     }
     
     searchProducts() {
-      this.currentPage = 0;
-      this.itemsPerPage = 12;
-      this.getProducts(this.keyword, this.selectedCategoryId, this.currentPage, this.itemsPerPage);
+      this.viewAllProducts();
     }
     
     getProducts(keyword: string, selectedCategoryId: number, page: number, limit: number) {

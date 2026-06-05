@@ -8,6 +8,7 @@ import { OrderDetailComponent } from './components/detail-order/order.detail.com
 import { UserProfileComponent } from './components/user-profile/user.profile.component';
 import { ContactComponent } from './components/contact/contact.component';
 import { InfoPageComponent } from './components/info-page/info-page.component';
+import { MyOrdersComponent } from './components/my-orders/my-orders.component';
 import { AuthGuardFn } from './guards/auth.guard';
 import { AdminGuardFn } from './guards/admin.guard';
 import { adminRoutes } from './components/admin/admin-routes';
@@ -20,6 +21,7 @@ export const routes: Routes = [
   { path: 'contact', component: ContactComponent },
   { path: 'page/:slug', component: InfoPageComponent },
   { path: 'orders', component: OrderComponent, canActivate: [AuthGuardFn] },
+  { path: 'my-orders', component: MyOrdersComponent, canActivate: [AuthGuardFn] },
   { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuardFn] },
   { path: 'orders/:id', component: OrderDetailComponent },
   // Admin — spread children từ adminRoutes, thêm guard

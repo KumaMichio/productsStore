@@ -10,9 +10,11 @@ import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { resolveImageUrl } from '../../utils/image.util';
+import { FadeInDirective } from '../../directives/fade-in.directive';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ApiResponse } from '../../responses/api.response';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
@@ -24,7 +26,9 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
     FooterComponent,
     HeaderComponent,
     CommonModule,
-    NgbModule
+    FadeInDirective,
+    NgbModule,
+    TranslateModule
   ]
 })
 
@@ -75,7 +79,9 @@ export class DetailProductComponent implements OnInit {
               response.product_images.forEach((product_image: ProductImage) => {
                 product_image.image_url = resolveImageUrl(product_image.image_url);
               });
-            }            
+            } else if (response.thumbnail) {
+              response.product_images = [{ image_url: resolveImageUrl(response.thumbnail) } as ProductImage];
+            }
             this.product = response;
             this.showImage(0);
             this.loadRelatedProducts(response.category_id);

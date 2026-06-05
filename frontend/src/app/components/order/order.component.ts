@@ -18,6 +18,7 @@ import { inject } from '@angular/core';
 import { CouponService } from '../../services/coupon.service';
 import { ApiResponse } from '../../responses/api.response';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-order',
@@ -28,8 +29,9 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
     FooterComponent,
     HeaderComponent,
     CommonModule,
-    FormsModule,    
+    FormsModule,
     ReactiveFormsModule,
+    TranslateModule,
   ]
 })
 

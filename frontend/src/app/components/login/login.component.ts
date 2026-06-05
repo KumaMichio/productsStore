@@ -14,20 +14,18 @@ import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 import { ApiResponse } from '../../responses/api.response';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [
-    FooterComponent,
-    HeaderComponent,
-    CommonModule,
-    FormsModule
-  ]
+  imports: [CommonModule, FormsModule, RouterModule, TranslateModule]
 })
 export class LoginComponent implements OnInit{
   @ViewChild('loginForm') loginForm!: NgForm;
@@ -50,6 +48,7 @@ export class LoginComponent implements OnInit{
   phoneNumber: string = '33445566';
   password: string = '123456789';
   showPassword: boolean = false;
+  apiBaseUrl = environment.apiBaseUrl;
 
   roles: Role[] = []; // Mảng roles
   rememberMe: boolean = true;

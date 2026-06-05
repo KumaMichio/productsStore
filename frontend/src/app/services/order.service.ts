@@ -45,4 +45,8 @@ export class OrderService {
     const url = `${environment.apiBaseUrl}/orders/${orderId}`;
     return this.http.delete<ApiResponse>(url);
   }
+
+  getOrdersByUserId(userId: number): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/user/${userId}`);
+  }
 }

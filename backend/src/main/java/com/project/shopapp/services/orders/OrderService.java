@@ -156,6 +156,7 @@ public class OrderService implements IOrderService{
         }
     }
     @Override
+    @Transactional(readOnly = true)
     public List<Order> findByUserId(Long userId) {
         return orderRepository.findByUserId(userId);
     }

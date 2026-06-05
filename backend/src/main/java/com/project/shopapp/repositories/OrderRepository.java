@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    //Tìm các đơn hàng của 1 user nào đó
-    List<Order> findByUserId(Long userId);
+    @Query("SELECT DISTINCT o FROM Order o LEFT JOIN FETCH o.orderDetails WHERE o.user.id = :userId ORDER BY o.id DESC")
+    List<Order> findByUserId(@Param("userId") Long userId);
     @Query("SELECT o FROM Order o WHERE o.active = true AND (:keyword IS NULL OR :keyword = '' OR " +
             "o.fullName LIKE %:keyword% " +
             "OR o.address LIKE %:keyword% " +

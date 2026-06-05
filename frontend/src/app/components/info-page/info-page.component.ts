@@ -18,7 +18,7 @@ interface InfoPageContent {
 const INFO_PAGES: Record<string, InfoPageContent> = {
   about: {
     title: 'Về chúng tôi',
-    intro: 'Maison Sand là một xưởng nhỏ tại Lisbon, tuyển chọn những vật dụng hằng ngày bền đẹp từ các nhà làm thủ công độc lập.',
+    intro: 'Kuma Shop là một xưởng nhỏ tại Lisbon, tuyển chọn những vật dụng hằng ngày bền đẹp từ các nhà làm thủ công độc lập.',
     sections: [
       {
         heading: 'Triết lý',
@@ -48,7 +48,7 @@ const INFO_PAGES: Record<string, InfoPageContent> = {
   },
   stockists: {
     title: 'Đại lý',
-    intro: 'Bạn có thể tìm thấy sản phẩm Maison Sand tại các cửa hàng đối tác.',
+    intro: 'Bạn có thể tìm thấy sản phẩm Kuma Shop tại các cửa hàng đối tác.',
     sections: [
       {
         heading: 'Việt Nam',
@@ -62,7 +62,7 @@ const INFO_PAGES: Record<string, InfoPageContent> = {
   },
   press: {
     title: 'Báo chí',
-    intro: 'Maison Sand trên các phương tiện truyền thông.',
+    intro: 'Kuma Shop trên các phương tiện truyền thông.',
     sections: [
       {
         paragraphs: [

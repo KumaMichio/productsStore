@@ -53,7 +53,7 @@
                     @if(retypePassword.length < 3 && registerForm.form.touched) {
                         <p class="text-danger field-error">Mật khẩu phải có ít nhất 3 ký tự</p>
                     }
-                    @if(registerForm.controls['retypePassword']?.hasError('passwordMismatch')
+                    @if(registerForm.controls['retypePassword'].hasError('passwordMismatch')
                         && registerForm.form.touched) {
                         <p class="text-danger field-error">Mật khẩu không khớp</p>
                     }
@@ -80,7 +80,7 @@
                             (input)="registerForm.form.markAsTouched(); checkAge()">
                             
                     <div class="divider-nospace"></div>
-                    @if(registerForm.controls['dateOfBirth']?.hasError('invalidAge')
+                    @if(registerForm.controls['dateOfBirth'].hasError('invalidAge')
                         && registerForm.form.touched){
                         <p class="text-danger" >
                             Bạn chưa đủ 18 tuổi

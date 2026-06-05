@@ -3,20 +3,20 @@
 <div class="detail-page">
   <!-- Breadcrumb -->
   <div class="breadcrumb-bar">
-    <a routerLink="/" class="back-link">← Back</a>
+    <a routerLink="/" class="back-link">{{ 'shop.back' | translate }}</a>
   </div>
 
   @if(product) {
   <div class="detail-layout">
     <!-- ── Left: Images ──────────────────────────────── -->
-    <div class="images-col">
+    <div class="images-col" appFadeIn="left" [fadeDelay]="0">
       <div class="main-image-wrap">
         @for(image of product.product_images; track image.image_url; let i = $index) {
           <img [src]="image.image_url" class="main-img"
                alt="Product image"
                [style.display]="i === currentImageIndex ? 'block' : 'none'">
         }
-        @if(!product.product_images?.length) {
+        @if(!product.product_images.length) {
           <div class="img-placeholder"></div>
         }
       </div>
@@ -31,15 +31,15 @@
     </div>
 
     <!-- ── Right: Info ───────────────────────────────── -->
-    <div class="info-col">
+    <div class="info-col" appFadeIn="right" [fadeDelay]="80">
       <p class="product-category-tag">{{ categoryName | uppercase }}</p>
       <h1 class="product-name">{{ product.name }}</h1>
-      <p class="product-price">\${{ product.price | number:'1.2-2' }}</p>
+      <p class="product-price">{{ product.price | number:'1.0-0' }} ₫</p>
       <p class="product-desc">{{ product.description }}</p>
 
       <!-- Size selector -->
       <div class="size-section">
-        <p class="section-sublabel">SIZE</p>
+        <p class="section-sublabel">{{ 'product.size' | translate }}</p>
         <div class="size-chips">
           @for(size of sizes; track size) {
             <button class="size-chip"
@@ -56,12 +56,12 @@
           <span class="qty-value">{{ quantity }}</span>
           <button class="qty-btn" (click)="increaseQuantity()">+</button>
         </div>
-        <button class="btn-add-cart" (click)="addToCart()">Add to bag</button>
+        <button class="btn-add-cart" (click)="addToCart()">{{ 'product.add_to_bag' | translate }}</button>
       </div>
 
       <!-- Details -->
       <div class="details-section">
-        <p class="section-sublabel">DETAILS</p>
+        <p class="section-sublabel">{{ 'product.details' | translate }}</p>
         <ul class="details-list">
           @for(detail of productDetails; track detail) {
             <li>{{ detail }}</li>
@@ -72,16 +72,16 @@
       <!-- Trust badges -->
       <div class="trust-badges">
         <div class="badge-item">
-          <span class="badge-title">Free shipping</span>
-          <span class="badge-sub">Over $120</span>
+          <span class="badge-title">{{ 'product.free_shipping' | translate }}</span>
+          <span class="badge-sub">{{ 'product.free_shipping_sub' | translate }}</span>
         </div>
         <div class="badge-item">
-          <span class="badge-title">30-day returns</span>
-          <span class="badge-sub">No questions</span>
+          <span class="badge-title">{{ 'product.returns' | translate }}</span>
+          <span class="badge-sub">{{ 'product.returns_sub' | translate }}</span>
         </div>
         <div class="badge-item">
-          <span class="badge-title">Made to last</span>
-          <span class="badge-sub">2-year warranty</span>
+          <span class="badge-title">{{ 'product.warranty' | translate }}</span>
+          <span class="badge-sub">{{ 'product.warranty_sub' | translate }}</span>
         </div>
       </div>
     </div>
@@ -91,17 +91,17 @@
   @if(relatedProducts.length > 0) {
     <div class="related-section">
       <hr class="section-divider">
-      <h2 class="related-heading">You may also like</h2>
+      <h2 class="related-heading" appFadeIn="up">{{ 'product.related_title' | translate }}</h2>
       <div class="related-grid">
-        @for(p of relatedProducts.slice(0, 3); track p.id) {
-          <div class="related-card" (click)="navigateToProduct(p.id)">
+        @for(p of relatedProducts.slice(0, 3); track p.id; let i = $index) {
+          <div class="related-card" appFadeIn="up" [fadeDelay]="i * 100" (click)="navigateToProduct(p.id)">
             <div class="related-img-wrap">
               <img [src]="p.url" [alt]="p.name" class="related-img">
             </div>
             <div class="related-info">
               <span class="related-name">{{ p.name }}</span>
               <span class="related-cat">Accessories</span>
-              <span class="related-price">\${{ p.price }}</span>
+              <span class="related-price">{{ p.price | number:'1.0-0' }} ₫</span>
             </div>
           </div>
         }

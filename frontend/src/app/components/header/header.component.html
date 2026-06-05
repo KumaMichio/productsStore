@@ -2,20 +2,21 @@
   <div class="header-inner">
     <!-- Left nav -->
     <nav class="nav-left">
-      <a routerLink="/" class="nav-link-item" [class.active]="activeNavItem === 0" (click)="setActiveNavItem(0)">Shop</a>
-      <a routerLink="/page/blog" class="nav-link-item" [class.active]="activeNavItem === 1" (click)="setActiveNavItem(1)">Journal</a>
-      <a routerLink="/page/about" class="nav-link-item" [class.active]="activeNavItem === 2" (click)="setActiveNavItem(2)">About</a>
+      <a routerLink="/" class="nav-link-item" [class.active]="activeNavItem === 0" (click)="setActiveNavItem(0)">{{ 'nav.shop' | translate }}</a>
+      <a routerLink="/page/blog" class="nav-link-item" [class.active]="activeNavItem === 1" (click)="setActiveNavItem(1)">{{ 'nav.journal' | translate }}</a>
+      <a routerLink="/page/about" class="nav-link-item" [class.active]="activeNavItem === 2" (click)="setActiveNavItem(2)">{{ 'nav.about' | translate }}</a>
     </nav>
 
     <!-- Center brand -->
-    <a routerLink="/" class="brand">Maison Sand</a>
+    <a routerLink="/" class="brand">{{ 'nav.brand' | translate }}</a>
 
     <!-- Right icons -->
     <div class="nav-right">
+      <!-- Search -->
       <div class="search-wrap">
         @if (searchOpen) {
           <input class="search-input" type="text" [(ngModel)]="searchKeyword"
-            (keyup.enter)="submitSearch()" placeholder="Tìm sản phẩm..." autofocus />
+            (keyup.enter)="submitSearch()" [placeholder]="'header.search_placeholder' | translate" autofocus />
         }
         <button class="icon-btn" aria-label="Search" (click)="toggleSearch()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -24,6 +25,26 @@
         </button>
       </div>
 
+      <!-- Language switcher -->
+      <div class="lang-wrap">
+        <button class="icon-btn lang-btn" (click)="langMenuOpen = !langMenuOpen">
+          <span class="lang-flag">{{ currentLang.flag }}</span>
+          <span class="lang-code">{{ currentLang.code.toUpperCase() }}</span>
+        </button>
+        @if(langMenuOpen) {
+          <div class="lang-dropdown">
+            @for(lang of languages; track lang.code) {
+              <button class="lang-option" [class.active]="lang.code === currentLang.code"
+                (click)="switchLang(lang.code)">
+                <span>{{ lang.flag }}</span>
+                <span>{{ lang.label }}</span>
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- User -->
       @if (userResponse) {
         <div class="user-menu-wrapper">
           <button class="icon-btn user-name-btn"
@@ -36,9 +57,9 @@
           </button>
           <ng-template #popoverContent>
             <div class="popover-list">
-              <a class="popover-item" (click)="handleItemClick(0)">Tài khoản của tôi</a>
-              <a class="popover-item" (click)="handleItemClick(1)">Đơn mua</a>
-              <a class="popover-item" (click)="handleItemClick(2)">Đăng xuất</a>
+              <a class="popover-item" (click)="handleItemClick(0)">{{ 'header.my_account' | translate }}</a>
+              <a class="popover-item" (click)="handleItemClick(1)">{{ 'header.my_orders' | translate }}</a>
+              <a class="popover-item" (click)="handleItemClick(2)">{{ 'header.logout' | translate }}</a>
             </div>
           </ng-template>
         </div>
@@ -50,6 +71,7 @@
         </a>
       }
 
+      <!-- Cart -->
       <a routerLink="/orders" class="icon-btn cart-btn" aria-label="Cart" [class.active]="activeNavItem === 3" (click)="setActiveNavItem(3)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
           <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/>
